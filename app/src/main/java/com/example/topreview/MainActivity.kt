@@ -1,32 +1,33 @@
 package com.example.topreview
 
+import AuthViewModel
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.activity.viewModels
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.topreview.activities.HomeActivity
+import com.example.topreview.activities.LoginActivity
 import com.example.topreview.ui.theme.TopReviewTheme
 
 class MainActivity : ComponentActivity() {
+    private val authViewModel: AuthViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            TopReviewTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+
+        if (authViewModel.isUserSignedIn()) {
+            // Navigate to the home screen or user profile
+            startActivity(Intent(this, HomeActivity::class.java))
+        } else {
+            // Navigate to the login screen
+            startActivity(Intent(this, LoginActivity::class.java))
         }
+
+        finish() // Close MainActivity after redirect
     }
 }
 

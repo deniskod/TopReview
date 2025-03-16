@@ -23,6 +23,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.LoginActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light">
+            <!-- Your other configurations -->
+        </activity>
+        <activity android:name=".activities.SignUpActivity"
+            android:label="Sign Up"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light">
+        </activity>
+        <activity android:name=".activities.HomeActivity"
+            android:exported="true"
+            android:label="Home"
+            android:theme="@style/Theme.TopReview">
+        </activity>
     </application>
 
 </manifest>
