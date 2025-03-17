@@ -12,12 +12,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.topreview.activities.HomeActivity
 import com.example.topreview.activities.LoginActivity
 import com.example.topreview.ui.theme.TopReviewTheme
+import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
 
         if (authViewModel.isUserSignedIn()) {
             // Navigate to the home screen or user profile
