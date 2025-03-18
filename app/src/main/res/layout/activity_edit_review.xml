@@ -43,45 +43,44 @@
             android:rating="0"/>
     </LinearLayout>
 
-    <!-- Image Picker Button -->
+    <FrameLayout
+        android:id="@+id/imageCardView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/rounded_border"
+        android:layout_marginBottom="12dp">
+
+        <ImageView
+            android:id="@+id/imageViewReview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
+
     <Button
-        android:id="@+id/buttonSelectImage"
+        android:id="@+id/buttonChangeImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Image"
+        android:text="Change Image"
         android:textSize="16sp"
         android:background="@drawable/rounded_button"
         android:textColor="@color/white"
         android:padding="12dp"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Selected Image Preview (Hidden Initially) -->
-    <FrameLayout
-        android:id="@+id/imageCardView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/rounded_border"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/imageViewSelected"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
-    </FrameLayout>
-
-
-    <!-- Submit Button -->
+    <!-- Save Button -->
     <Button
-        android:id="@+id/buttonSubmitReview"
+        android:id="@+id/buttonSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit Review"
+        android:text="Save Changes"
         android:textSize="16sp"
         android:background="@drawable/rounded_button"
         android:textColor="@color/white"
-        android:padding="12dp"/>
+        android:padding="12dp"
+        android:layout_marginTop="16dp"/>
 
+    <!-- Progress Bar (Initially hidden) -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

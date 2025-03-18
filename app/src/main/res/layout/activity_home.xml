@@ -1,51 +1,41 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<!-- activity_home.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
-    <RelativeLayout
+    <!-- RecyclerView takes the remaining space -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewReviews"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activities.HomeActivity">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"/>
 
-        <!-- RecyclerView to display reviews -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/reviewsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            android:layout_above="@id/filterButton"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
 
-        <!-- Filter Button to toggle between all reviews & user reviews -->
-        <ToggleButton
-            android:id="@+id/filterButton"
+        <!-- Add Review Button -->
+        <Button
+            android:id="@+id/btnAddReview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textOn="My Reviews"
-            android:textOff="All Reviews"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="72dp"/> <!-- Adjusted margin for logout button -->
+            android:text="Add Review"
+            android:layout_marginEnd="16dp"
+        />
 
-        <!-- Logout Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/logoutButton"
+        <!-- My Reviews Button -->
+        <Button
+            android:id="@+id/btnMyReviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Logout"
-            android:layout_below="@id/filterButton"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"/>
+            android:text="My Reviews"
+            />
+    </LinearLayout>
 
-        <!-- Floating Action Button to add a new review -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addReviewFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add"
-            app:backgroundTint="@color/colorPrimary"
-            app:layout_anchorGravity="bottom|end"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="16dp"/>
-    </RelativeLayout>
-</layout>
+</LinearLayout>

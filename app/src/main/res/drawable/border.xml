@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#ffffff"/>
+    <stroke android:color="#000000" android:width="3dp"/> <!-- Black border -->
+    <corners android:radius="40dp"/>  <!-- Change from 50% to a fixed dp value -->
+</shape>

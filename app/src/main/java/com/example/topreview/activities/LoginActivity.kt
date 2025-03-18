@@ -7,8 +7,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.topreview.databinding.ActivityLoginBinding
-import com.example.topreview.activities.HomeActivity
-import com.example.topreview.activities.SignUpActivity
 
 class LoginActivity : AppCompatActivity() {
 
