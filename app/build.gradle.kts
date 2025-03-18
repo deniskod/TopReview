@@ -71,6 +71,7 @@ dependencies {
     // Room Database (Local Storage)
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.5.0")
 
     // Navigation Component (Graph Nav & SafeArgs)
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
@@ -92,4 +93,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.gms:play-services-auth:21.1.1")
     kapt("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.2")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("androidx.cardview:cardview:1.0.0")
 }
