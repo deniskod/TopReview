@@ -3,6 +3,8 @@ package com.example.topreview.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -42,7 +44,6 @@ class HomeActivity : AppCompatActivity() {
         reviewAdapter = ReviewAdapter(emptyList())  // Start with an empty list
         recyclerView.adapter = reviewAdapter
 
-
         // Get current user ID from Firebase Authentication
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""  // If user is not logged in, empty string
 
@@ -53,11 +54,11 @@ class HomeActivity : AppCompatActivity() {
         btnMyReviews.setOnClickListener {
             showAllReviews = !showAllReviews
             if (showAllReviews) {
-                btnMyReviews.text = "My Reviews"  // Change button text to show "My Reviews"
-                observeReviews(userId)  // Fetch all reviews
+                btnMyReviews.text = "My Reviews"
+                observeReviews(userId)
             } else {
-                btnMyReviews.text = "Show All Reviews"  // Change button text to show "All Reviews"
-                observeReviews(userId)  // Fetch user-specific reviews
+                btnMyReviews.text = "Show All Reviews"
+                observeReviews(userId)
             }
         }
 
@@ -69,8 +70,38 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    // Inflate the top-right menu
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    // Handle menu item clicks
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_edit_profile -> {
+                val intent = Intent(this, EditProfileActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.action_logout -> {
+                handleLogout()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    // Handle user logout
+    private fun handleLogout() {
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
     private fun observeReviews(userId: String) {
-        // Observe reviews based on the button state
         if (showAllReviews) {
             // Get all reviews from repository
             reviewRepository.getAllReviews().observe(this, Observer { reviews ->
@@ -95,4 +126,3 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 }
-
