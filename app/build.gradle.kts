@@ -95,4 +95,6 @@ dependencies {
     kapt("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.2")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
 }

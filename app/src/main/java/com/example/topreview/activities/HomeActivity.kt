@@ -42,6 +42,7 @@ class HomeActivity : AppCompatActivity() {
         reviewAdapter = ReviewAdapter(emptyList())  // Start with an empty list
         recyclerView.adapter = reviewAdapter
 
+
         // Get current user ID from Firebase Authentication
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""  // If user is not logged in, empty string
 

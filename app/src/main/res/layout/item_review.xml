@@ -13,6 +13,16 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Edit Icon (Pencil) on the top-right -->
+        <ImageView
+            android:id="@+id/imageEditReview"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_edit"
+            android:contentDescription="Edit Review"
+            android:layout_marginBottom="8dp"/>
+
         <!-- Profile Image -->
         <FrameLayout
             android:layout_width="80dp"

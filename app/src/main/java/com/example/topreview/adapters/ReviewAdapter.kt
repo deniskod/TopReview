@@ -1,16 +1,19 @@
 package com.example.topreview.adapters
 
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.topreview.R
+import com.example.topreview.activities.EditReviewActivity
 import com.example.topreview.models.Review
 import de.hdodenhof.circleimageview.CircleImageView
-
 
 class ReviewAdapter(private var reviews: List<Review>) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
@@ -33,6 +36,19 @@ class ReviewAdapter(private var reviews: List<Review>) : RecyclerView.Adapter<Re
         Glide.with(holder.imageView.context)
             .load(review.imageUrl)  // The image URL from Firebase Storage
             .into(holder.imageView)
+
+        // Set an OnClickListener for the edit icon (pencil)
+        holder.imageEditReview.setOnClickListener {
+            // Create an Intent to open EditReviewActivity
+            val context = holder.itemView.context
+            val intent = Intent(context, EditReviewActivity::class.java)
+            Log.d("nicelog","review to editReview $review ")
+            // Pass the review data to the EditReviewActivity
+            intent.putExtra("REVIEW", review)
+
+            // Start the EditReviewActivity
+            context.startActivity(intent)
+        }
     }
 
     // Return the number of reviews
@@ -51,6 +67,8 @@ class ReviewAdapter(private var reviews: List<Review>) : RecyclerView.Adapter<Re
         val descriptionTextView: TextView = itemView.findViewById(R.id.textViewDescription)
         val textViewRating: TextView = itemView.findViewById(R.id.textViewRating)
         val imageView: CircleImageView = itemView.findViewById(R.id.imageViewReview)
+
+        // Add reference to the pencil icon (edit icon)
+        val imageEditReview: ImageView = itemView.findViewById(R.id.imageEditReview)
     }
 }
-
