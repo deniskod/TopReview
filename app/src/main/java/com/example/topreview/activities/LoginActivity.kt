@@ -1,12 +1,12 @@
 package com.example.topreview.activities
 
-import AuthViewModel
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.topreview.databinding.ActivityLoginBinding
+import com.example.topreview.viewmodel.AuthViewModel
 
 class LoginActivity : AppCompatActivity() {
 

@@ -26,6 +26,7 @@
             android:layout_below="@id/titleSignUp"
             android:layout_marginTop="16dp"
             android:padding="8dp"
+            android:textColor="@color/white"
             android:background="@drawable/edit_text_bg"/>
 
         <EditText
@@ -36,6 +37,7 @@
             android:layout_below="@id/usernameEditText"
             android:layout_marginTop="16dp"
             android:padding="8dp"
+            android:textColor="@color/white"
             android:background="@drawable/edit_text_bg"/>
 
         <EditText
@@ -46,6 +48,7 @@
             android:layout_below="@id/emailEditText"
             android:layout_marginTop="16dp"
             android:padding="8dp"
+            android:textColor="@color/white"
             android:background="@drawable/edit_text_bg"
             android:inputType="textPassword"/>
 
@@ -66,7 +69,7 @@
             android:layout_height="wrap_content"
             android:text="Already have an account? Log in"
             android:textSize="14sp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:layout_below="@id/signUpButton"
             android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"/>
