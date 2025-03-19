@@ -24,6 +24,7 @@
             android:layout_height="48dp"
             android:hint="Email"
             android:layout_below="@id/titleLogin"
+            android:textColor="@color/white"
             android:layout_marginTop="16dp"
             android:padding="8dp"
             android:background="@drawable/edit_text_bg"/>
@@ -36,6 +37,7 @@
             android:layout_below="@id/emailEditText"
             android:layout_marginTop="16dp"
             android:padding="8dp"
+            android:textColor="@color/white"
             android:background="@drawable/edit_text_bg"
             android:inputType="textPassword"/>
 
@@ -56,7 +58,7 @@
             android:layout_height="wrap_content"
             android:text="Forgot password?"
             android:textSize="14sp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:layout_below="@id/loginButton"
             android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"/>
@@ -68,7 +70,7 @@
             android:layout_height="wrap_content"
             android:text="Don't have an account? Sign up"
             android:textSize="14sp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:layout_below="@id/forgotPasswordButton"
             android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"/>

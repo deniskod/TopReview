@@ -1,6 +1,5 @@
 package com.example.topreview
 
-import AuthViewModel
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.topreview.activities.HomeActivity
 import com.example.topreview.activities.LoginActivity
 import com.example.topreview.ui.theme.TopReviewTheme
+import com.example.topreview.viewmodel.AuthViewModel
 import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {

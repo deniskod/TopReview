@@ -60,6 +60,12 @@
             android:theme="@style/Theme.TopReview">
         </activity>
 
+        <activity android:name=".activities.EditProfileActivity"
+            android:exported="true"
+            android:label="Edit your profile"
+            android:theme="@style/Theme.TopReview">
+        </activity>
+
     </application>
 
 </manifest>

@@ -1,0 +1,70 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <!-- If using ViewModel, declare it here -->
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titleEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Editable Username -->
+        <EditText
+            android:id="@+id/editTextUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter new username"
+            android:inputType="textPersonName"
+            android:padding="12dp"
+            android:background="@drawable/edit_text_bg"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Editable Email -->
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter new email"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:background="@drawable/edit_text_bg"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:background="@drawable/edit_text_bg"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="12dp"/>
+        <!-- Save Changes Button -->
+        <Button
+            android:id="@+id/buttonSaveProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Changes"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</layout>
