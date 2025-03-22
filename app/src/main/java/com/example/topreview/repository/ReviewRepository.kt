@@ -6,9 +6,8 @@ import com.example.topreview.models.Review
 
 class ReviewRepository(private val reviewDao: ReviewDao) {
 
-    // Get all reviews from Room (return LiveData)
     fun getAllReviews(): LiveData<List<Review>> {
-        return reviewDao.getAllReviews()  // Room returns LiveData directly
+        return reviewDao.getAllReviews()
     }
 
     suspend fun insertReview(review: Review) {

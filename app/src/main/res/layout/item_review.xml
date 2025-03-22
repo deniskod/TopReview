@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Edit Icon (Pencil) on the top-right -->
         <ImageView
             android:id="@+id/imageEditReview"
             android:layout_width="24dp"
@@ -23,7 +22,16 @@
             android:contentDescription="Edit Review"
             android:layout_marginBottom="8dp"/>
 
-        <!-- Profile Image -->
+        <ImageView
+            android:id="@+id/imageDeleteReview"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Delete Review"
+            android:layout_marginBottom="8dp" />
+
+
         <FrameLayout
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -38,7 +46,54 @@
                 android:src="@drawable/baseline_person_24"/>
         </FrameLayout>
 
-        <!-- Description Row (Label + Value) -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Creator:"
+                android:textSize="16sp"
+                android:textColor="#212121"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="yosi yosi"
+                android:textSize="16sp"
+                android:textColor="#212121"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="City:"
+                android:textSize="14sp"
+                android:textColor="#212121"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/textViewCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tel Aviv"
+                android:textSize="14sp"
+                android:textColor="#757575" />
+        </LinearLayout>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -65,7 +120,6 @@
 
         </LinearLayout>
 
-        <!-- Rating Row (Label + Value) -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -90,6 +144,9 @@
                 android:textColor="#757575"/>
 
         </LinearLayout>
+
+
+
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

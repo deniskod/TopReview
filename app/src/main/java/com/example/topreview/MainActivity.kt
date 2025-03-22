@@ -1,50 +1,35 @@
 package com.example.topreview
 
 import AuthViewModel
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.topreview.activities.HomeActivity
-import com.example.topreview.activities.LoginActivity
-import com.example.topreview.ui.theme.TopReviewTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import com.example.topreview.databinding.ActivityMainBinding
 import com.google.firebase.FirebaseApp
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
     private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
 
-        if (authViewModel.isUserSignedIn()) {
-            // Navigate to the home screen or user profile
-            startActivity(Intent(this, HomeActivity::class.java))
-        } else {
-            // Navigate to the login screen
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        finish() // Close MainActivity after redirect
-    }
-}
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.findNavController()
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TopReviewTheme {
-        Greeting("Android")
+        val graph = navController.navInflater.inflate(R.navigation.nav_graph)
+        graph.setStartDestination(
+            if (authViewModel.isUserSignedIn()) R.id.homeFragment
+            else R.id.loginFragment
+        )
+        navController.graph = graph
     }
 }
