@@ -23,6 +23,16 @@
             android:contentDescription="Edit Review"
             android:layout_marginBottom="8dp"/>
 
+        <ImageView
+            android:id="@+id/imageDeleteReview"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Delete Review"
+            android:layout_marginBottom="8dp" />
+
+
         <!-- Profile Image -->
         <FrameLayout
             android:layout_width="80dp"
@@ -37,6 +47,30 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/baseline_person_24"/>
         </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Creator:"
+                android:textSize="16sp"
+                android:textColor="#212121"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="yosi yosi"
+                android:textSize="16sp"
+                android:textColor="#212121"/>
+        </LinearLayout>
 
         <!-- Description Row (Label + Value) -->
         <LinearLayout
@@ -90,6 +124,9 @@
                 android:textColor="#757575"/>
 
         </LinearLayout>
+
+
+
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

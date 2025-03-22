@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
         <!-- Declare ViewModel or LiveData variables here if needed -->
     </data>
@@ -18,8 +20,8 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="32dp"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="32dp" />
 
         <EditText
             android:id="@+id/emailEditText"
@@ -31,7 +33,7 @@
             android:padding="12dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            android:background="@drawable/rounded_edittext"/>
+            android:background="@drawable/rounded_edittext" />
 
         <EditText
             android:id="@+id/passwordEditText"
@@ -44,7 +46,7 @@
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:background="@drawable/rounded_edittext"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/loginButton"
@@ -56,7 +58,7 @@
             android:layout_below="@id/passwordEditText"
             android:layout_marginTop="24dp"
             android:background="@drawable/rounded_button"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/forgotPasswordText"
@@ -69,7 +71,7 @@
             android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"
             android:clickable="true"
-            android:focusable="true"/>
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/signUpText"
@@ -82,7 +84,6 @@
             android:layout_marginTop="16dp"
             android:layout_centerHorizontal="true"
             android:clickable="true"
-            android:focusable="true"/>
-
+            android:focusable="true" />
     </RelativeLayout>
 </layout>

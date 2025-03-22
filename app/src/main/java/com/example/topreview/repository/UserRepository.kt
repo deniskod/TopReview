@@ -18,4 +18,8 @@ class UserRepository(private val userDao: UserDao) {
     suspend fun updateUser(user: User) {
         userDao.update(user) // You need to implement this in your DAO
     }
+
+    suspend fun getAll(): List<User> {
+        return userDao.getAll()
+    }
 }

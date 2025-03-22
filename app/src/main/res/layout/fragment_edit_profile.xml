@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
         <!-- ViewModel binding if needed -->
     </data>
@@ -24,6 +26,7 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp" />
 
+            <!-- Profile Image -->
             <FrameLayout
                 android:id="@+id/imageCardView"
                 android:layout_width="match_parent"
@@ -38,6 +41,7 @@
                     android:scaleType="centerCrop"/>
             </FrameLayout>
 
+            <!-- Image Picker Button -->
             <ImageButton
                 android:id="@+id/buttonSelectImage"
                 android:layout_width="64dp"

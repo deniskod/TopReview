@@ -1,52 +1,61 @@
 package com.example.topreview.adapters
 
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.topreview.R
-import com.example.topreview.activities.EditReviewActivity
 import com.example.topreview.models.Review
+import com.example.topreview.models.User
 import de.hdodenhof.circleimageview.CircleImageView
 
-class ReviewAdapter(private var reviews: List<Review>) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
+class ReviewAdapter(
+    private var reviews: List<Review>,
+    private val currentUserId: String,
+    private val userMap: Map<String, User>, // Added to map uid to user
+    private val onEditClicked: (Review) -> Unit,
+    private val onDeleteClicked: (Review) -> Unit
+) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_review, parent, false)
         return ReviewViewHolder(view)
     }
 
-
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = reviews[position]
 
         holder.descriptionTextView.text = review.description
-
         holder.textViewRating.text = "${review.rating}/5"
+
+        val user = userMap[review.userId]
+        holder.textViewUserName.text = user?.let { "${it.firstName} ${it.lastName}" } ?: "By: Unknown"
 
         Glide.with(holder.imageView.context)
             .load(review.imageUrl)
             .into(holder.imageView)
 
-        holder.imageEditReview.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, EditReviewActivity::class.java)
-            Log.d("nicelog","review to editReview $review ")
-            intent.putExtra("REVIEW", review)
+        if (review.userId == currentUserId) {
+            holder.imageEditReview.visibility = View.VISIBLE
+            holder.imageDeleteReview.visibility = View.VISIBLE
 
-            context.startActivity(intent)
+            holder.imageEditReview.setOnClickListener {
+                onEditClicked(review)
+            }
+
+            holder.imageDeleteReview.setOnClickListener {
+                onDeleteClicked(review)
+            }
+        } else {
+            holder.imageEditReview.visibility = View.GONE
+            holder.imageDeleteReview.visibility = View.GONE
         }
     }
 
-    override fun getItemCount(): Int {
-        return reviews.size
-    }
+    override fun getItemCount(): Int = reviews.size
 
     fun updateReviews(newReviews: List<Review>) {
         reviews = newReviews
@@ -56,8 +65,9 @@ class ReviewAdapter(private var reviews: List<Review>) : RecyclerView.Adapter<Re
     class ReviewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val descriptionTextView: TextView = itemView.findViewById(R.id.textViewDescription)
         val textViewRating: TextView = itemView.findViewById(R.id.textViewRating)
+        val textViewUserName: TextView = itemView.findViewById(R.id.textViewUserName)
         val imageView: CircleImageView = itemView.findViewById(R.id.imageViewReview)
-
         val imageEditReview: ImageView = itemView.findViewById(R.id.imageEditReview)
+        val imageDeleteReview: ImageView = itemView.findViewById(R.id.imageDeleteReview)
     }
 }
