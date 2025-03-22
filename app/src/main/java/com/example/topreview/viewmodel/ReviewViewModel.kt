@@ -35,16 +35,12 @@ class ReviewViewModel : ViewModel() {
 
 
 
-        // Upload image to Firebase Storage
         val uploadTask = imageRef.putFile(imageUri)
 
         uploadTask.addOnSuccessListener {
             Log.d("ReviewViewModel", "Image uploaded successfully.")
-            // Get the image URL after successful upload
             imageRef.downloadUrl.addOnSuccessListener { uri ->
                 Log.d("ReviewViewModel", "Image URL: $uri")
-                // You can save the review details (description + imageUrl) in Firestore here
-                // Example: Firestore instance and save the review with the imageUrl
                 _uploadStatus.value = "Review uploaded!"
                 _loading.value = false
             }
@@ -54,7 +50,7 @@ class ReviewViewModel : ViewModel() {
             _loading.value = false
         }
 
-        // Log to check if uploadTask was reached
+
         Log.d("ReviewViewModel", "Image upload task has been initiated.")
     }
 

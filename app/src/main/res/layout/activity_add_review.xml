@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
@@ -5,6 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white">
+
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/buttonBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_back"
+        android:contentDescription="Back"/>
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add your review"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
 
     <!-- Description Field -->
     <EditText
@@ -43,16 +63,16 @@
             android:rating="0"/>
     </LinearLayout>
 
-    <!-- Image Picker Button -->
-    <Button
+    <!-- Image Picker Button with Icon -->
+    <ImageButton
         android:id="@+id/buttonSelectImage"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Image"
-        android:textSize="16sp"
-        android:background="@drawable/rounded_button"
-        android:textColor="@color/white"
-        android:padding="12dp"
+        android:src="@drawable/ic_image"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Select Image"
+        android:layout_gravity="center"
+        android:padding="16dp"
         android:layout_marginBottom="12dp"/>
 
     <!-- Selected Image Preview (Hidden Initially) -->
@@ -61,7 +81,8 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@drawable/rounded_border"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_marginBottom="16dp"> <!-- Added marginBottom -->
 
         <ImageView
             android:id="@+id/imageViewSelected"
@@ -69,7 +90,6 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"/>
     </FrameLayout>
-
 
     <!-- Submit Button -->
     <Button
@@ -89,5 +109,4 @@
         android:layout_gravity="center"
         android:visibility="gone"
         android:indeterminate="true"/>
-
 </LinearLayout>

@@ -12,7 +12,7 @@ object DatabaseProvider {
                 context.applicationContext,
                 ReviewDatabase::class.java,
                 "review_database"
-            ).build()
+            ).fallbackToDestructiveMigration().build()
         }
         return instance!!
     }

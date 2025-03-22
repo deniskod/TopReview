@@ -6,7 +6,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@android:color/white">
 
         <TextView
             android:id="@+id/titleLogin"
@@ -14,6 +15,8 @@
             android:layout_height="wrap_content"
             android:text="Login"
             android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="32dp"
             android:layout_alignParentTop="true"/>
@@ -21,56 +24,65 @@
         <EditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="50dp"
             android:hint="Email"
             android:layout_below="@id/titleLogin"
             android:layout_marginTop="16dp"
-            android:padding="8dp"
-            android:background="@drawable/edit_text_bg"/>
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@drawable/rounded_edittext"/>
 
         <EditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="50dp"
             android:hint="Password"
             android:layout_below="@id/emailEditText"
             android:layout_marginTop="16dp"
-            android:padding="8dp"
-            android:background="@drawable/edit_text_bg"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:background="@drawable/rounded_edittext"
             android:inputType="textPassword"/>
 
         <Button
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Login"
+            android:layout_height="50dp"
+            android:text="LOGIN"
+            android:textAllCaps="false"
+            android:textSize="16sp"
             android:layout_below="@id/passwordEditText"
-            android:layout_marginTop="32dp"
-            android:background="@color/colorPrimary"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_button"
             android:textColor="@android:color/white"/>
 
-        <!-- Optionally, add a TextView for forgot password -->
-        <Button
-            android:id="@+id/forgotPasswordButton"
+        <TextView
+            android:id="@+id/forgotPasswordText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Forgot password?"
+            android:text="Forgot Password?"
             android:textSize="14sp"
             android:textColor="@color/colorPrimary"
             android:layout_below="@id/loginButton"
             android:layout_marginTop="16dp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:focusable="true"/>
 
-        <!-- Optionally, add a TextView for signup -->
-        <Button
-            android:id="@+id/signUpButton"
+        <TextView
+            android:id="@+id/signUpText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Don't have an account? Sign up"
             android:textSize="14sp"
             android:textColor="@color/colorPrimary"
-            android:layout_below="@id/forgotPasswordButton"
+            android:layout_below="@id/forgotPasswordText"
             android:layout_marginTop="16dp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:focusable="true"/>
+
     </RelativeLayout>
 </layout>

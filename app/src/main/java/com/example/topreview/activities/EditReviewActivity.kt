@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.RatingBar
@@ -31,71 +32,69 @@ class EditReviewActivity : AppCompatActivity() {
     private lateinit var ratingBar: RatingBar
     private lateinit var imageView: ImageView
     private lateinit var saveButton: Button
-    private lateinit var changeImageButton: Button
+    private lateinit var changeImageButton: ImageButton
     private lateinit var review: Review
     private lateinit var reviewRepository: ReviewRepository
-    private var imageUri: Uri? = null // To store the selected image URI
+    private lateinit var buttonBack: ImageButton
+    private var imageUri: Uri? = null
     private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_review)
 
-        // Initialize views
         descriptionEditText = findViewById(R.id.editTextDescription)
         ratingBar = findViewById(R.id.ratingBar)
         imageView = findViewById(R.id.imageViewReview)
         saveButton = findViewById(R.id.buttonSave)
         changeImageButton = findViewById(R.id.buttonChangeImage)
         progressBar = findViewById(R.id.progressBar)
+        buttonBack = findViewById(R.id.buttonBack)
 
-        // Initialize repository
+        buttonBack.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+
         val db = DatabaseProvider.getDatabase(applicationContext)
         reviewRepository = ReviewRepository(db.reviewDao())
 
-        // Get the review passed from the intent
         review = intent.getParcelableExtra("REVIEW") ?: return
         Log.d("nicelog", "review in editReview $review")
 
-        // Set the existing review data to the views
         descriptionEditText.setText(review.description)
         ratingBar.rating = review.rating
 
-        // Set the image if exists using Glide (for URL loading)
         if (review.imageUrl.isNotEmpty()) {
             Glide.with(this)
                 .load(review.imageUrl)
                 .into(imageView)
         }
 
-        // Handle image change button click
         changeImageButton.setOnClickListener {
-            // Open the gallery to pick an image
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, IMAGE_PICK_REQUEST)
         }
 
-        // Handle save button click
         saveButton.setOnClickListener {
             val updatedDescription = descriptionEditText.text.toString()
             val updatedRating = ratingBar.rating
             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
             val currentTimestamp = System.currentTimeMillis()
             progressBar.visibility = View.VISIBLE
-            // If an image was selected, upload the image and update the image URL
             if (imageUri != null) {
                 FirebaseHelper.uploadImageToFirebaseStorage(imageUri!!,userId) { imageUrl ->
                     updateReview(updatedDescription, updatedRating, imageUrl,currentTimestamp)
                 }
             } else {
-                // If no new image selected, update the review with the existing image URL
                 updateReview(updatedDescription, updatedRating, review.imageUrl,currentTimestamp)
             }
         }
     }
 
-    // Update the review in the database
     private fun updateReview(description: String, rating: Float, imageUrl: String,timestamp: Long) {
         val updatedReview = review.copy(description = description, rating = rating, imageUrl = imageUrl, timestamp = timestamp)
 
@@ -105,10 +104,9 @@ class EditReviewActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Review updated successfully!", Toast.LENGTH_SHORT).show()
         progressBar.visibility = View.GONE
-        finish()  // Close the activity
+        finish()
     }
 
-    // Handle the result from the image picker activity
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_REQUEST) {
