@@ -11,6 +11,7 @@ data class Review(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val description: String,
     val rating: Float,
+    val city: String,
     val imageUrl: String,
     val userId: String,
     val timestamp: Long = System.currentTimeMillis()

@@ -52,7 +52,6 @@ class SignUpFragment : Fragment() {
         val db = DatabaseProvider.getDatabase(requireContext())
         userRepository = UserRepository(db.userDao())
 
-        // Image picker
         binding.buttonSelectImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE)

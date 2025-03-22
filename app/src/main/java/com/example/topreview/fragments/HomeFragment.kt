@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true) // Enable menu in fragment
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -92,7 +92,6 @@ class HomeFragment : Fragment() {
     private fun observeReviews(userId: String) {
         if (showAllReviews) {
             reviewRepository.getAllReviews().observe(viewLifecycleOwner) { reviews ->
-                Log.d("HALOGS", "all reviews ${reviews.size}")
                 reviewAdapter.updateReviews(reviews)
                 if (reviews.isEmpty()) {
                     Toast.makeText(requireContext(), "No reviews available", Toast.LENGTH_SHORT).show()
@@ -101,7 +100,6 @@ class HomeFragment : Fragment() {
         } else {
             lifecycleScope.launch(Dispatchers.Main) {
                 val userReviews = reviewRepository.getUserReviews(userId)
-                Log.d("HALOGS", "user reviews ${userReviews.size}")
                 reviewAdapter.updateReviews(userReviews)
                 if (userReviews.isEmpty()) {
                     Toast.makeText(requireContext(), "You have no reviews", Toast.LENGTH_SHORT).show()

@@ -16,7 +16,7 @@ object FirebaseHelper {
         imageRef.putFile(imageUri)
             .addOnSuccessListener { taskSnapshot ->
                 imageRef.downloadUrl.addOnSuccessListener { uri ->
-                    val imageUrl = uri.toString()  // Get the download URL
+                    val imageUrl = uri.toString()
                     callback(imageUrl)
                 }
             }
@@ -29,7 +29,7 @@ object FirebaseHelper {
         Glide.with(imageView.context)
             .load(imageUrl)
             .centerCrop()
-            .placeholder(R.drawable.placeholder_image) // Replace with your own drawable // Optional: shown on failure
+            .placeholder(R.drawable.placeholder_image)
             .into(imageView)
     }
 }

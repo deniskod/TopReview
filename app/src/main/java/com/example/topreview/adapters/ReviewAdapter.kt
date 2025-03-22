@@ -15,7 +15,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 class ReviewAdapter(
     private var reviews: List<Review>,
     private val currentUserId: String,
-    private val userMap: Map<String, User>, // Added to map uid to user
+    private val userMap: Map<String, User>,
     private val onEditClicked: (Review) -> Unit,
     private val onDeleteClicked: (Review) -> Unit
 ) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
@@ -30,6 +30,7 @@ class ReviewAdapter(
 
         holder.descriptionTextView.text = review.description
         holder.textViewRating.text = "${review.rating}/5"
+        holder.textViewCity.text = review.city
 
         val user = userMap[review.userId]
         holder.textViewUserName.text = user?.let { "${it.firstName} ${it.lastName}" } ?: "By: Unknown"
@@ -55,6 +56,7 @@ class ReviewAdapter(
         }
     }
 
+
     override fun getItemCount(): Int = reviews.size
 
     fun updateReviews(newReviews: List<Review>) {
@@ -66,8 +68,10 @@ class ReviewAdapter(
         val descriptionTextView: TextView = itemView.findViewById(R.id.textViewDescription)
         val textViewRating: TextView = itemView.findViewById(R.id.textViewRating)
         val textViewUserName: TextView = itemView.findViewById(R.id.textViewUserName)
+        val textViewCity: TextView = itemView.findViewById(R.id.textViewCity)
         val imageView: CircleImageView = itemView.findViewById(R.id.imageViewReview)
         val imageEditReview: ImageView = itemView.findViewById(R.id.imageEditReview)
         val imageDeleteReview: ImageView = itemView.findViewById(R.id.imageDeleteReview)
     }
+
 }

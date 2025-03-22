@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <!-- Declare ViewModel or LiveData variables here if needed -->
     </data>
 
     <RelativeLayout

@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <!-- ViewModel or LiveData can be declared here if needed -->
     </data>
 
     <LinearLayout
@@ -11,7 +10,6 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <!-- RecyclerView takes remaining space -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewReviews"
             android:layout_width="match_parent"
@@ -19,7 +17,6 @@
             android:layout_weight="1"
             android:layout_marginTop="16dp" />
 
-        <!-- Buttons container -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -27,7 +24,6 @@
             android:gravity="center"
             android:layout_marginBottom="16dp">
 
-            <!-- Add Review Button -->
             <Button
                 android:id="@+id/btnAddReview"
                 android:layout_width="wrap_content"
@@ -35,7 +31,6 @@
                 android:text="Add Review"
                 android:layout_marginEnd="16dp" />
 
-            <!-- My Reviews Button -->
             <Button
                 android:id="@+id/btnMyReviews"
                 android:layout_width="wrap_content"

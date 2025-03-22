@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <!-- ViewModel binding or variables can go here if needed -->
     </data>
 
     <LinearLayout
@@ -12,7 +11,6 @@
         android:layout_height="wrap_content"
         android:background="@color/white">
 
-        <!-- Back Button -->
         <ImageButton
             android:id="@+id/buttonBack"
             android:layout_width="48dp"
@@ -21,7 +19,6 @@
             android:src="@drawable/ic_back"
             android:contentDescription="Back" />
 
-        <!-- Title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +28,6 @@
             android:gravity="center"
             android:layout_marginBottom="16dp" />
 
-        <!-- Description Field -->
         <EditText
             android:id="@+id/editTextDescription"
             android:layout_width="match_parent"
@@ -43,7 +39,20 @@
             android:background="@drawable/rounded_edittext"
             android:layout_marginBottom="12dp" />
 
-        <!-- Rating Bar with Label -->
+        <AutoCompleteTextView
+            android:id="@+id/editTextCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select a city"
+            android:inputType="text"
+            android:drawableEnd="@drawable/ic_dropdown"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:focusable="false"
+            android:clickable="true"
+            android:layout_marginBottom="16dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +77,6 @@
                 android:rating="0" />
         </LinearLayout>
 
-        <!-- Selected Image Preview -->
         <FrameLayout
             android:id="@+id/imageCardView"
             android:layout_width="match_parent"
@@ -83,7 +91,6 @@
                 android:scaleType="centerCrop" />
         </FrameLayout>
 
-        <!-- Change Image Button -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,7 +107,6 @@
                 android:padding="16dp" />
         </LinearLayout>
 
-        <!-- Save Button -->
         <Button
             android:id="@+id/buttonSave"
             android:layout_width="match_parent"
@@ -112,7 +118,6 @@
             android:padding="12dp"
             android:layout_marginTop="16dp" />
 
-        <!-- Progress Bar -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"

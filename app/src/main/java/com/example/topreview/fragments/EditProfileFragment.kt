@@ -49,6 +49,10 @@ class EditProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.buttonBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         val db = DatabaseProvider.getDatabase(requireContext())
         userRepository = UserRepository(db.userDao())
 
@@ -82,6 +86,8 @@ class EditProfileFragment : Fragment() {
             }
         }
     }
+
+
 
     private fun loadUserData() {
         lifecycleScope.launch {

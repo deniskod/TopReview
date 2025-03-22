@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <!-- You can declare LiveData or ViewModel bindings here if needed -->
     </data>
 
     <RelativeLayout
@@ -11,7 +10,6 @@
         android:padding="16dp"
         android:background="@android:color/white">
 
-        <!-- Title -->
         <TextView
             android:id="@+id/titleSignUp"
             android:layout_width="wrap_content"
@@ -23,7 +21,6 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true" />
 
-        <!-- Select Image Button -->
         <ImageButton
             android:id="@+id/buttonSelectImage"
             android:layout_width="wrap_content"
@@ -36,7 +33,6 @@
             android:padding="16dp"
             android:layout_marginTop="16dp" />
 
-        <!-- Selected Image Preview -->
         <FrameLayout
             android:id="@+id/imageCardView"
             android:layout_width="match_parent"
@@ -53,7 +49,6 @@
                 android:scaleType="centerCrop" />
         </FrameLayout>
 
-        <!-- First Name -->
         <EditText
             android:id="@+id/firstNameEditText"
             android:layout_width="match_parent"
@@ -67,7 +62,6 @@
             android:layout_below="@id/imageCardView"
             android:layout_marginTop="16dp" />
 
-        <!-- Last Name -->
         <EditText
             android:id="@+id/lastNameEditText"
             android:layout_width="match_parent"
@@ -81,7 +75,6 @@
             android:layout_below="@id/firstNameEditText"
             android:layout_marginTop="16dp" />
 
-        <!-- Email -->
         <EditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
@@ -95,7 +88,6 @@
             android:layout_below="@id/lastNameEditText"
             android:layout_marginTop="16dp" />
 
-        <!-- Password -->
         <EditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
@@ -109,7 +101,6 @@
             android:layout_below="@id/emailEditText"
             android:layout_marginTop="16dp" />
 
-        <!-- Sign Up Button -->
         <Button
             android:id="@+id/signUpButton"
             android:layout_width="match_parent"
@@ -122,7 +113,6 @@
             android:layout_below="@id/passwordEditText"
             android:layout_marginTop="24dp" />
 
-        <!-- Login Text -->
         <TextView
             android:id="@+id/loginText"
             android:layout_width="wrap_content"

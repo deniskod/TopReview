@@ -21,12 +21,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Setup NavHostFragment
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.findNavController()
 
-        // Dynamically set start destination based on sign-in state
         val graph = navController.navInflater.inflate(R.navigation.nav_graph)
         graph.setStartDestination(
             if (authViewModel.isUserSignedIn()) R.id.homeFragment

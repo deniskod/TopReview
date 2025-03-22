@@ -1,7 +1,5 @@
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
 
@@ -45,20 +43,11 @@ class AuthViewModel : ViewModel() {
                     if (errorMessage.contains("There is no user record")) {
                         onComplete(false, "This email is not registered.")
                     } else {
-                        onComplete(false, errorMessage) // Handle other errors
+                        onComplete(false, errorMessage)
                     }
                 }
             }
     }
-
-
-
-
-
-    fun signOut() {
-        auth.signOut()
-    }
-
 
     fun isUserSignedIn(): Boolean {
         return auth.currentUser != null
