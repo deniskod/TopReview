@@ -10,4 +10,6 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryVariant">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="button_enabled_bg">@color/colorPrimary</color>
+    <color name="button_disabled_bg">#BDBDBD</color>
 </resources>

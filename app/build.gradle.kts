@@ -94,7 +94,6 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
-
+    implementation("com.google.android.material:material:1.11.0")
     implementation ("com.google.android.libraries.places:places:3.4.0")
-
 }

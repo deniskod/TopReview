@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.topreview.R
 import com.example.topreview.database.DatabaseProvider
 import com.example.topreview.databinding.FragmentAddReviewBinding
 import com.example.topreview.models.Review
@@ -24,7 +25,9 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,10 +41,6 @@ class AddReviewFragment : Fragment() {
     private var imageUri: Uri? = null
     private var selectedCity: String? = null
 
-    companion object {
-        private const val IMAGE_PICK_REQUEST_CODE = 100
-    }
-
     private val cityPickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -50,10 +49,20 @@ class AddReviewFragment : Fragment() {
             selectedCity = place.name
             binding.editTextCity.setText(selectedCity)
             checkSubmitButtonState()
-        } else if (result.resultCode == com.google.android.libraries.places.widget.AutocompleteActivity.RESULT_ERROR){
-
-        val status = Autocomplete.getStatusFromIntent(result.data!!)
+        } else if (result.resultCode == AutocompleteActivity.RESULT_ERROR) {
+            val status = Autocomplete.getStatusFromIntent(result.data!!)
             Toast.makeText(requireContext(), "City selection error: ${status.statusMessage}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+            imageUri = result.data?.data
+            binding.imageViewSelected.setImageURI(imageUri)
+            binding.imageCardView.visibility = View.VISIBLE
+            checkSubmitButtonState()
         }
     }
 
@@ -69,10 +78,10 @@ class AddReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialize Places if not yet initialized
         val apiKey = requireContext().packageManager
             .getApplicationInfo(requireContext().packageName, android.content.pm.PackageManager.GET_META_DATA)
             .metaData.getString("com.google.android.geo.API_KEY")
-
 
         if (!Places.isInitialized() && apiKey != null) {
             Places.initialize(requireContext().applicationContext, apiKey)
@@ -113,73 +122,99 @@ class AddReviewFragment : Fragment() {
 
         binding.buttonSelectImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE)
+            imagePickerLauncher.launch(intent)
         }
 
         binding.buttonSubmitReview.setOnClickListener {
+            if (!validateFields()) return@setOnClickListener
+
             val description = binding.editTextDescription.text.toString()
             val rating = binding.ratingBar.rating
             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-            if (selectedCity.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), "Please select a city!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (description.isEmpty()) {
-                Toast.makeText(requireContext(), "Please enter a description!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (rating == 0f) {
-                Toast.makeText(requireContext(), "Please select a rating!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (imageUri == null) {
-                Toast.makeText(requireContext(), "Please select an image!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
             binding.progressBar.visibility = View.VISIBLE
+            binding.buttonSubmitReview.isEnabled = false
 
-            FirebaseHelper.uploadImageToFirebaseStorage(imageUri!!, userId) { imageUrl ->
-                val review = Review(
-                    description = description,
-                    rating = rating,
-                    city = selectedCity!!,
-                    imageUrl = imageUrl,
-                    userId = userId
-                )
+            imageUri?.let { uri ->
+                FirebaseHelper.uploadImageToFirebaseStorage(uri, userId) { imageUrl ->
 
-                lifecycleScope.launch(Dispatchers.IO) {
-                    reviewRepository.insertReview(review)
+                    val review = Review(
+                        description = description,
+                        rating = rating,
+                        city = selectedCity!!,
+                        imageUrl = imageUrl,
+                        userId = userId
+                    )
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        reviewRepository.insertReview(review)
+                        requireActivity().runOnUiThread {
+                            binding.progressBar.visibility = View.GONE
+                            binding.buttonSubmitReview.isEnabled = true
+                            Toast.makeText(requireContext(), "Review added successfully!", Toast.LENGTH_SHORT).show()
+                            findNavController().navigateUp()
+                        }
+                    }
                 }
-
-                requireActivity().runOnUiThread {
-                    binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Review added successfully!", Toast.LENGTH_SHORT).show()
-                    findNavController().navigateUp()
-                }
+            } ?: run {
+                Toast.makeText(requireContext(), "Image not selected", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.GONE
+                binding.buttonSubmitReview.isEnabled = true
             }
         }
+    }
+
+    private fun validateFields(): Boolean {
+        var isValid = true
+
+        getTextInputLayout(binding.editTextDescription)?.error = null
+        getTextInputLayout(binding.editTextCity)?.error = null
+
+        val description = binding.editTextDescription.text.toString()
+        if (description.isEmpty()) {
+            getTextInputLayout(binding.editTextDescription)?.error = "Description is required"
+            isValid = false
+        }
+
+        if (selectedCity.isNullOrEmpty()) {
+            getTextInputLayout(binding.editTextCity)?.error = "Please select a city"
+            isValid = false
+        }
+
+        if (binding.ratingBar.rating == 0f) {
+            Toast.makeText(requireContext(), "Please select a rating!", Toast.LENGTH_SHORT).show()
+            isValid = false
+        }
+
+        if (imageUri == null) {
+            Toast.makeText(requireContext(), "Please select an image!", Toast.LENGTH_SHORT).show()
+            isValid = false
+        }
+
+        return isValid
+    }
+
+    private fun getTextInputLayout(view: View): TextInputLayout? {
+        return view.parent as? TextInputLayout
     }
 
     private fun checkSubmitButtonState() {
         val description = binding.editTextDescription.text.toString()
         val rating = binding.ratingBar.rating
-        binding.buttonSubmitReview.isEnabled =
-            description.isNotEmpty() && rating > 0 && imageUri != null && !selectedCity.isNullOrEmpty()
-    }
+        val isEnabled = description.isNotEmpty() && rating > 0 &&
+                imageUri != null && !selectedCity.isNullOrEmpty()
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            imageUri = data?.data
-            binding.imageViewSelected.setImageURI(imageUri)
-            binding.imageCardView.visibility = View.VISIBLE
-            checkSubmitButtonState()
+        binding.buttonSubmitReview.isEnabled = isEnabled
+
+        val colorResId = if (isEnabled) {
+            R.color.button_enabled_bg
+        } else {
+            R.color.button_disabled_bg
         }
+
+        binding.buttonSubmitReview.setBackgroundColor(
+            resources.getColor(colorResId, requireContext().theme)
+        )
     }
 
     override fun onDestroyView() {

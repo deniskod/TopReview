@@ -1,9 +1,9 @@
 package com.example.topreview.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,11 +29,6 @@ class HomeFragment : Fragment() {
     private lateinit var userRepository: UserRepository
     private var showAllReviews = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,6 +46,28 @@ class HomeFragment : Fragment() {
         userRepository = UserRepository(db.userDao())
 
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
+        val menuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_main, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_edit_profile -> {
+                        findNavController().navigate(R.id.action_homeFragment_to_editProfileFragment)
+                        true
+                    }
+                    R.id.action_logout -> {
+                        FirebaseAuth.getInstance().signOut()
+                        findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner)
 
         lifecycleScope.launch {
             val users = withContext(Dispatchers.IO) { userRepository.getAll() }
@@ -79,7 +96,7 @@ class HomeFragment : Fragment() {
 
             binding.btnMyReviews.setOnClickListener {
                 showAllReviews = !showAllReviews
-                binding.btnMyReviews.text = if (showAllReviews) "My Reviews" else "Show All Reviews"
+                binding.btnMyReviews.text = if (showAllReviews) "Show My Reviews" else "Show All Reviews"
                 observeReviews(userId)
             }
 
@@ -105,25 +122,6 @@ class HomeFragment : Fragment() {
                     Toast.makeText(requireContext(), "You have no reviews", Toast.LENGTH_SHORT).show()
                 }
             }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_edit_profile -> {
-                findNavController().navigate(R.id.action_homeFragment_to_editProfileFragment)
-                true
-            }
-            R.id.action_logout -> {
-                FirebaseAuth.getInstance().signOut()
-                findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 

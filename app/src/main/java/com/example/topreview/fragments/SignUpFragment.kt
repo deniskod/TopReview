@@ -1,7 +1,6 @@
 package com.example.topreview.fragments
 
 import AuthViewModel
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -34,8 +34,14 @@ class SignUpFragment : Fragment() {
 
     private val authViewModel: AuthViewModel by viewModels()
 
-    companion object {
-        private const val IMAGE_PICK_REQUEST_CODE = 100
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            imageUri = uri
+            binding.imageViewSelected.setImageURI(imageUri)
+            binding.imageViewSelected.visibility = View.VISIBLE
+        }
     }
 
     override fun onCreateView(
@@ -53,8 +59,7 @@ class SignUpFragment : Fragment() {
         userRepository = UserRepository(db.userDao())
 
         binding.buttonSelectImage.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE)
+            imagePickerLauncher.launch("image/*")
         }
 
         binding.signUpButton.setOnClickListener {
@@ -114,15 +119,6 @@ class SignUpFragment : Fragment() {
 
     private fun showToast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            imageUri = data.data
-            binding.imageViewSelected.setImageURI(imageUri)
-            binding.imageCardView.visibility = View.VISIBLE
-        }
     }
 
     override fun onDestroyView() {

@@ -1,124 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-    </data>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="16dp"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
-
-        <ImageButton
-            android:id="@+id/buttonBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_back"
-            android:contentDescription="Back"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add your review"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="16dp"/>
-
-        <EditText
-            android:id="@+id/editTextDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Write a review..."
-            android:inputType="textMultiLine"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:background="@drawable/rounded_edittext"
-            android:layout_marginBottom="12dp"/>
-
-        <AutoCompleteTextView
-            android:id="@+id/editTextCity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Select a city"
-            android:inputType="text"
-            android:drawableEnd="@drawable/ic_dropdown"
-            android:background="@drawable/rounded_edittext"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:focusable="false"
-            android:clickable="true"
-            android:layout_marginBottom="16dp"/>
+        android:layout_height="match_parent"
+        android:background="?android:attr/windowBackground">
 
         <LinearLayout
+            android:orientation="vertical"
+            android:padding="24dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:gravity="center_horizontal">
 
-            <TextView
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/buttonBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_back"
+                android:contentDescription="Back"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_gravity="start"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rating:"
-                android:textSize="16sp"
+                android:text="Add your review"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginBottom="24dp" />
 
-            <RatingBar
-                android:id="@+id/ratingBar"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Write a review..."
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="3"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Select a city"
+                app:endIconMode="dropdown_menu"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                android:layout_marginBottom="16dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/editTextCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:paddingTop="12dp"
+                    android:paddingStart="12dp"
+                    android:paddingBottom="12dp"
+                    android:minHeight="48dp"
+                    tools:ignore="RtlSymmetry" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rating:"
+                    android:textStyle="bold"
+                    style="@style/TextAppearance.Material3.BodyLarge"
+                    android:layout_marginEnd="8dp" />
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:rating="0" />
+            </LinearLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/buttonSelectImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="0"/>
-        </LinearLayout>
+                android:text="Change Profile Image"
+                android:src="@drawable/ic_image"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                app:cornerRadius="12dp" />
 
-        <ImageButton
-            android:id="@+id/buttonSelectImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_image"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Select Image"
-            android:layout_gravity="center"
-            android:padding="16dp"
-            android:layout_marginBottom="12dp"/>
-
-        <FrameLayout
-            android:id="@+id/imageCardView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/rounded_border"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp">
-
-            <ImageView
-                android:id="@+id/imageViewSelected"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/imageCardView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
-        </FrameLayout>
+                android:layout_height="200dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorPrimary"
+                android:layout_marginBottom="16dp">
 
-        <Button
-            android:id="@+id/buttonSubmitReview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Submit Review"
-            android:textSize="16sp"
-            android:background="@drawable/rounded_button"
-            android:textColor="@color/white"
-            android:padding="12dp"/>
+                <ImageView
+                    android:id="@+id/imageViewSelected"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+            </com.google.android.material.card.MaterialCardView>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:indeterminate="true"/>
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSubmitReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit Review"
+                app:cornerRadius="12dp"
+                android:layout_marginBottom="24dp" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                app:indicatorSize="48dp" />
+
+        </LinearLayout>
+    </ScrollView>
 </layout>
