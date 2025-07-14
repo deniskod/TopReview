@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,6 +7,13 @@ plugins {
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
+}
+
+val secretsFile = rootProject.file("secrets.properties")
+val secrets = Properties().apply {
+    if (secretsFile.exists()) {
+        load(secretsFile.inputStream())
+    }
 }
 
 android {
@@ -20,6 +29,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        resValue(
+            "string",
+            "google_maps_key",
+            secrets.getProperty("MAPS_API_KEY", "")
+        )
     }
 
     buildTypes {
