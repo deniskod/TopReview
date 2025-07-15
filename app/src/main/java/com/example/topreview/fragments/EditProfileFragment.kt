@@ -94,8 +94,8 @@ class EditProfileFragment : Fragment() {
             val user = userRepository.getUserById(userId)
             withContext(Dispatchers.Main) {
                 if (user != null) {
-                    binding.editTextFirstName.setText(user.firstName)
-                    binding.editTextLastName.setText(user.lastName)
+                    binding.editTextFirstName.setText(user.name.split(' ')[0])
+                    binding.editTextLastName.setText(user.name.split(' ')[1])
                     currentImageUrl = user.imageUrl
 
                     if (!currentImageUrl.isNullOrEmpty()) {
@@ -114,8 +114,7 @@ class EditProfileFragment : Fragment() {
             val user = userRepository.getUserById(userId)
             if (user != null) {
                 val updatedUser = user.copy(
-                    firstName = firstName,
-                    lastName = lastName,
+                    name = "$firstName $lastName",
                     imageUrl = imageUrl ?: user.imageUrl
                 )
                 userRepository.updateUser(updatedUser)

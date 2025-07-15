@@ -7,7 +7,7 @@ import com.example.topreview.dao.UserDao
 import com.example.topreview.models.Review
 import com.example.topreview.models.User
 
-@Database(entities = [Review::class, User::class], version = 1)
+@Database(entities = [Review::class, User::class], version = 5)
 abstract class ReviewDatabase : RoomDatabase() {
     abstract fun reviewDao(): ReviewDao
     abstract fun userDao(): UserDao

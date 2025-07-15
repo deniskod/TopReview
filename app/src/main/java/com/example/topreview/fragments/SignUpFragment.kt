@@ -1,10 +1,8 @@
 package com.example.topreview.fragments
 
 import AuthViewModel
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.topreview.R
 import com.example.topreview.databinding.FragmentSignUpBinding
-import com.example.topreview.models.User
 import com.example.topreview.repository.UserRepository
 import com.example.topreview.utils.FirebaseHelper
 import com.example.topreview.database.DatabaseProvider
@@ -96,12 +93,11 @@ class SignUpFragment : Fragment() {
     }
 
     private fun saveUserAndNavigate(userId: String, firstName: String, lastName: String, imageUrl: String) {
-        val user = User(uid = userId, firstName = firstName, lastName = lastName, imageUrl = imageUrl)
-
+        val fullName = "$firstName $lastName"
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val result = userRepository.insertUser(user)
-                if (result > 0) {
+                val result = userRepository.saveUserToFirestore(userId,fullName,imageUrl)
+                if (result != null) {
                     android.util.Log.d("SignUpFragment", "User successfully added with rowId: $result")
                 } else {
                     android.util.Log.e("SignUpFragment", "Insert failed (rowId <= 0)")

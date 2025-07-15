@@ -1,6 +1,7 @@
 package com.example.topreview.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.view.MenuProvider
@@ -42,7 +43,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val db = DatabaseProvider.getDatabase(requireContext())
-        reviewRepository = ReviewRepository(db.reviewDao())
+        reviewRepository = ReviewRepository()
         userRepository = UserRepository(db.userDao())
 
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
@@ -70,9 +71,10 @@ class HomeFragment : Fragment() {
         }, viewLifecycleOwner)
 
         lifecycleScope.launch {
-            val users = withContext(Dispatchers.IO) { userRepository.getAll() }
+            val users = userRepository.getAll()
+            Log.e("USERS", "users: ${users}")
             val userMap = users.associateBy { it.uid }
-
+            Log.e("USERS", "userMap: ${userMap}")
             reviewAdapter = ReviewAdapter(
                 emptyList(),
                 currentUserId = userId,
@@ -85,6 +87,7 @@ class HomeFragment : Fragment() {
                     lifecycleScope.launch {
                         reviewRepository.deleteReview(review)
                         Toast.makeText(requireContext(), "Review deleted", Toast.LENGTH_SHORT).show()
+                        observeReviews(userId)
                     }
                 }
             )
@@ -108,7 +111,8 @@ class HomeFragment : Fragment() {
 
     private fun observeReviews(userId: String) {
         if (showAllReviews) {
-            reviewRepository.getAllReviews().observe(viewLifecycleOwner) { reviews ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                val reviews = reviewRepository.getAllReviews()
                 reviewAdapter.updateReviews(reviews)
                 if (reviews.isEmpty()) {
                     Toast.makeText(requireContext(), "No reviews available", Toast.LENGTH_SHORT).show()

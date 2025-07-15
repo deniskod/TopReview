@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.topreview.R
-import com.example.topreview.database.DatabaseProvider
 import com.example.topreview.databinding.FragmentAddReviewBinding
 import com.example.topreview.models.Review
 import com.example.topreview.repository.ReviewRepository
@@ -78,7 +77,6 @@ class AddReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize Places if not yet initialized
         val apiKey = requireContext().packageManager
             .getApplicationInfo(requireContext().packageName, android.content.pm.PackageManager.GET_META_DATA)
             .metaData.getString("com.google.android.geo.API_KEY")
@@ -87,8 +85,7 @@ class AddReviewFragment : Fragment() {
             Places.initialize(requireContext().applicationContext, apiKey)
         }
 
-        val db = DatabaseProvider.getDatabase(requireContext())
-        reviewRepository = ReviewRepository(db.reviewDao())
+        reviewRepository = ReviewRepository()
 
         binding.progressBar.visibility = View.GONE
         binding.buttonSubmitReview.isEnabled = false
@@ -131,7 +128,6 @@ class AddReviewFragment : Fragment() {
             val description = binding.editTextDescription.text.toString()
             val rating = binding.ratingBar.rating
             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-
             binding.progressBar.visibility = View.VISIBLE
             binding.buttonSubmitReview.isEnabled = false
 

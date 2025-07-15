@@ -1,29 +1,87 @@
 package com.example.topreview.repository
 
-import androidx.lifecycle.LiveData
-import com.example.topreview.dao.ReviewDao
+import android.util.Log
 import com.example.topreview.models.Review
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
 
-class ReviewRepository(private val reviewDao: ReviewDao) {
+class ReviewRepository {
+    private val db = Firebase.firestore.collection("reviews")
 
-    fun getAllReviews(): LiveData<List<Review>> {
-        return reviewDao.getAllReviews()
+    suspend fun getAllReviews(): List<Review> {
+        return try {
+            val snapshot = db.orderBy("timestamp", Query.Direction.DESCENDING).get().await()
+            val reviews = mutableListOf<Review>()
+            for (document in snapshot.documents) {
+                try {
+                    val review = document.toObject(Review::class.java)
+                    if (review != null) {
+                        review.id = document.id
+                        reviews.add(review)
+                    }
+                } catch (e: Exception) {
+                    Log.e("getAllReviews()", "Failed to parse document: ${document.id}", e)
+                }
+            }
+            reviews
+        } catch (e: Exception) {
+            Log.e("getAllReviews()", "Error fetching reviews", e)
+            emptyList()
+        }
     }
 
-    suspend fun insertReview(review: Review) {
-        reviewDao.insertReview(review)
+    fun insertReview(review: Review) {
+        val docRef = db.document()
+        val reviewWithId = review.copy(id = docRef.id)
+
+        docRef.set(reviewWithId)
+            .addOnSuccessListener {
+                Log.d("insertReview()", "DocumentSnapshot successfully written with ID: ${docRef.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w("insertReview()", "Error writing document", e)
+            }
     }
 
     suspend fun getUserReviews(userId: String): List<Review> {
-        return reviewDao.getUserReviews(userId)
+        return try {
+            val snapshot = db.whereEqualTo("userId",userId).get().await()
+            val reviews = mutableListOf<Review>()
+            for (document in snapshot.documents) {
+                try {
+                    val review = document.toObject(Review::class.java)
+                    if (review != null) {
+                        reviews.add(review)
+                    }
+                } catch (e: Exception) {
+                    Log.e("getUserReviews()", "Failed to parse document: ${document.id}", e)
+                }
+            }
+            reviews
+        } catch (e: Exception) {
+            Log.e("getUserReviews()", "Error fetching reviews", e)
+            emptyList()
+        }
     }
 
     suspend fun deleteReview(review: Review) {
-        reviewDao.deleteReview(review)
+        try {
+            db.document(review.id).delete().await()
+            Log.d("deleteReview()", "Successfully deleted review with ID: ${review.id}")
+        } catch (e: Exception) {
+            Log.e("deleteReview()", "Failed to delete review with ID: ${review.id}", e)
+        }
     }
 
     suspend fun updateReview(review: Review) {
-        reviewDao.updateReview(review)
+        try {
+            db.document(review.id).set(review).await()
+            Log.d("updateReview()", "Successfully updated review with ID: ${review.id}")
+        } catch (e: Exception) {
+            Log.e("updateReview()", "Failed to update review with ID: ${review.id}", e)
+        }
     }
 }
 

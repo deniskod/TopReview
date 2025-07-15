@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.topreview.database.DatabaseProvider
 import com.example.topreview.databinding.FragmentEditReviewBinding
 import com.example.topreview.models.Review
 import com.example.topreview.repository.ReviewRepository
@@ -77,8 +76,7 @@ class EditReviewFragment : Fragment() {
             Places.initialize(requireContext().applicationContext, apiKey)
         }
 
-        val db = DatabaseProvider.getDatabase(requireContext())
-        reviewRepository = ReviewRepository(db.reviewDao())
+        reviewRepository = ReviewRepository()
 
         val args = EditReviewFragmentArgs.fromBundle(requireArguments())
         review = args.review
