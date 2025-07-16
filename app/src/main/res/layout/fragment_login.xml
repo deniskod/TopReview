@@ -7,7 +7,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="24dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="32dp"
+        android:paddingBottom="16dp"
         android:background="@android:color/white">
 
         <com.google.android.material.textview.MaterialTextView
@@ -32,7 +35,7 @@
             app:layout_constraintTop_toBottomOf="@id/titleLogin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="48dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailEditText"
@@ -68,6 +71,7 @@
             android:text="LOGIN"
             android:textAllCaps="false"
             android:textSize="16sp"
+            style="@style/Widget.Material3.Button"
             app:layout_constraintTop_toBottomOf="@id/passwordInputLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +103,7 @@
             app:layout_constraintTop_toBottomOf="@id/forgotPasswordText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="12dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

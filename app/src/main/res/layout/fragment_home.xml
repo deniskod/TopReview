@@ -22,26 +22,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:paddingTop="16dp">
 
-            <com.google.android.material.button.MaterialButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnAddReview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Review"
-                android:textColor="@android:color/white"
-                app:backgroundTint="@color/colorPrimary"
-                android:layout_marginEnd="16dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+                android:layout_marginEnd="64dp"
+                app:srcCompat="@drawable/ic_add"
+                app:tint="@android:color/white"
+                app:backgroundTint="@color/colorPrimary" />
 
-            <com.google.android.material.button.MaterialButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnMyReviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                app:backgroundTint="@color/colorPrimary"
-                android:text="My Reviews"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="8dp"
+                app:tint="@android:color/white"
+                app:backgroundTint="@color/colorPrimary" />
         </LinearLayout>
     </LinearLayout>
 </layout>

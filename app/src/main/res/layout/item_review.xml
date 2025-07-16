@@ -87,8 +87,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="City:"
-                android:textSize="14sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
 
@@ -97,8 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tel Aviv"
-                android:textSize="14sp"
-                android:textColor="?attr/colorOnSurfaceVariant" />
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface" />
         </LinearLayout>
 
         <LinearLayout
@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Description:"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
@@ -136,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rating:"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
@@ -146,7 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3.5/5"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="?attr/colorOnSurfaceVariant" />
         </LinearLayout>
 

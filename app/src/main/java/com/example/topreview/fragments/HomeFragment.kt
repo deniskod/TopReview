@@ -95,11 +95,22 @@ class HomeFragment : Fragment() {
             binding.recyclerViewReviews.layoutManager = LinearLayoutManager(requireContext())
             binding.recyclerViewReviews.adapter = reviewAdapter
 
+            binding.btnMyReviews.setImageResource(
+                if (showAllReviews) R.drawable.baseline_person_24 else R.drawable.ic_all
+            )
+
             observeReviews(userId)
 
             binding.btnMyReviews.setOnClickListener {
                 showAllReviews = !showAllReviews
-                binding.btnMyReviews.text = if (showAllReviews) "Show My Reviews" else "Show All Reviews"
+
+                val iconRes = if (showAllReviews) {
+                    R.drawable.baseline_person_24
+                } else {
+                    R.drawable.ic_all
+                }
+
+                binding.btnMyReviews.setImageResource(iconRes)
                 observeReviews(userId)
             }
 

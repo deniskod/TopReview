@@ -104,7 +104,8 @@
                     android:layout_height="wrap_content"
                     android:numStars="5"
                     android:stepSize="0.5"
-                    android:rating="0" />
+                    android:rating="0"
+                    android:theme="@style/GoldRatingBarStyle" />
             </LinearLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -141,7 +142,8 @@
                 android:layout_height="wrap_content"
                 android:text="Submit Review"
                 app:cornerRadius="12dp"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="24dp"
+                style="@style/Widget.Material3.Button" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
@@ -149,7 +151,11 @@
                 android:layout_height="48dp"
                 android:visibility="gone"
                 android:layout_gravity="center"
-                app:indicatorSize="48dp" />
+                style="@style/Widget.Material3.CircularProgressIndicator"
+                app:indicatorSize="48dp"
+                app:indicatorInset="4dp"
+                app:trackThickness="4dp"
+                app:indicatorColor="@color/colorPrimary" />
 
         </LinearLayout>
     </ScrollView>
