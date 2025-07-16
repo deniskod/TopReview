@@ -72,9 +72,8 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
             val users = userRepository.getAll()
-            Log.e("USERS", "users: ${users}")
             val userMap = users.associateBy { it.uid }
-            Log.e("USERS", "userMap: ${userMap}")
+
             reviewAdapter = ReviewAdapter(
                 emptyList(),
                 currentUserId = userId,

@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="Add your review"
                 android:textSize="24sp"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 android:layout_marginBottom="24dp" />
 
@@ -42,6 +43,7 @@
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
+                android:textColor="?attr/colorOnSurface"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
                 android:layout_marginBottom="16dp">
@@ -52,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
                     android:minLines="3"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,6 +67,7 @@
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
+                android:textColor="?attr/colorOnSurface"
                 app:boxCornerRadiusBottomEnd="8dp"
                 android:layout_marginBottom="16dp">
 
@@ -76,6 +80,7 @@
                     android:singleLine="true"
                     android:maxLines="1"
                     android:ellipsize="end"
+                    android:textColor="?attr/colorOnSurface"
                     android:paddingTop="12dp"
                     android:paddingStart="12dp"
                     android:paddingBottom="12dp"
@@ -94,6 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rating:"
+                    android:textColor="?attr/colorOnSurface"
                     android:textStyle="bold"
                     style="@style/TextAppearance.Material3.BodyLarge"
                     android:layout_marginEnd="8dp" />

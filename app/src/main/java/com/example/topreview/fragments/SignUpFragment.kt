@@ -99,8 +99,6 @@ class SignUpFragment : Fragment() {
                 val result = userRepository.saveUserToFirestore(userId,fullName,imageUrl)
                 if (result != null) {
                     android.util.Log.d("SignUpFragment", "User successfully added with rowId: $result")
-                } else {
-                    android.util.Log.e("SignUpFragment", "Insert failed (rowId <= 0)")
                 }
             } catch (e: Exception) {
                 android.util.Log.e("SignUpFragment", "Insert exception: ${e.message}", e)
