@@ -1,4 +1,4 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,24 +13,31 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/imageEditReview"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="end"
-            android:src="@drawable/ic_edit"
-            android:contentDescription="Edit Review"
-            android:layout_marginBottom="8dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginBottom="8dp"
+            android:weightSum="2">
 
-        <ImageView
-            android:id="@+id/imageDeleteReview"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="end"
-            android:src="@drawable/ic_delete"
-            android:contentDescription="Delete Review"
-            android:layout_marginBottom="8dp" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageEditReview"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Review"
+                android:layout_marginEnd="16dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent" />
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageDeleteReview"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_delete"
+                android:contentDescription="Delete Review"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent" />
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="80dp"
@@ -43,7 +50,7 @@
                 android:id="@+id/imageViewReview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/baseline_person_24"/>
+                android:src="@drawable/baseline_person_24" />
         </FrameLayout>
 
         <LinearLayout
@@ -52,22 +59,22 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Creator:"
                 android:textSize="16sp"
-                android:textColor="#212121"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textViewUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="yosi yosi"
                 android:textSize="16sp"
-                android:textColor="#212121"/>
+                android:textColor="?attr/colorOnSurface" />
         </LinearLayout>
 
         <LinearLayout
@@ -76,22 +83,22 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="City:"
-                android:textSize="14sp"
-                android:textColor="#212121"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 android:layout_marginEnd="8dp" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textViewCity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tel Aviv"
-                android:textSize="14sp"
-                android:textColor="#757575" />
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface" />
         </LinearLayout>
 
         <LinearLayout
@@ -100,24 +107,23 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Description:"
-                android:textSize="14sp"
-                android:textColor="#212121"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textViewDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Review description"
                 android:textSize="16sp"
-                android:textColor="#212121"/>
-
+                android:textColor="?attr/colorOnSurface" />
         </LinearLayout>
 
         <LinearLayout
@@ -126,27 +132,24 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rating:"
-                android:textSize="14sp"
-                android:textColor="#212121"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textViewRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rating: 3.5/5"
-                android:textSize="14sp"
-                android:textColor="#757575"/>
-
+                android:text="3.5/5"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface" />
         </LinearLayout>
 
-
-
-
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+</com.google.android.material.card.MaterialCardView>

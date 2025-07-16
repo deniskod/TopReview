@@ -32,16 +32,14 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.loginButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
+            val email = binding.emailEditText.text.toString().trim()
             val password = binding.passwordEditText.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 authViewModel.signIn(email, password) { success, message ->
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     if (success) {
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-                    } else {
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {
@@ -59,7 +57,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun showForgotPasswordDialog() {
-        val email = binding.emailEditText.text.toString()
+        val email = binding.emailEditText.text.toString().trim()
 
         if (email.isNotEmpty()) {
             authViewModel.sendPasswordResetEmail(email) { success, message ->

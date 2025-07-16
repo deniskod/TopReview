@@ -33,7 +33,7 @@ class ReviewAdapter(
         holder.textViewCity.text = review.city
 
         val user = userMap[review.userId]
-        holder.textViewUserName.text = user?.let { "${it.firstName} ${it.lastName}" } ?: "By: Unknown"
+        holder.textViewUserName.text = user?.let { it.name } ?: "By: Unknown"
 
         Glide.with(holder.imageView.context)
             .load(review.imageUrl)

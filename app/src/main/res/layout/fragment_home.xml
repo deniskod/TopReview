@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-    </data>
+    <data/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -22,20 +22,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:paddingTop="16dp">
 
-            <Button
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnAddReview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Review"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginEnd="64dp"
+                app:srcCompat="@drawable/ic_add"
+                app:tint="@android:color/white"
+                app:backgroundTint="@color/colorPrimary" />
 
-            <Button
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnMyReviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="My Reviews" />
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="8dp"
+                app:tint="@android:color/white"
+                app:backgroundTint="@color/colorPrimary" />
         </LinearLayout>
     </LinearLayout>
 </layout>

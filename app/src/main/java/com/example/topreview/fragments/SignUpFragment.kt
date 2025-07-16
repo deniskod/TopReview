@@ -1,22 +1,19 @@
 package com.example.topreview.fragments
 
 import AuthViewModel
-import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.topreview.R
 import com.example.topreview.databinding.FragmentSignUpBinding
-import com.example.topreview.models.User
 import com.example.topreview.repository.UserRepository
 import com.example.topreview.utils.FirebaseHelper
 import com.example.topreview.database.DatabaseProvider
@@ -34,8 +31,14 @@ class SignUpFragment : Fragment() {
 
     private val authViewModel: AuthViewModel by viewModels()
 
-    companion object {
-        private const val IMAGE_PICK_REQUEST_CODE = 100
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            imageUri = uri
+            binding.imageViewSelected.setImageURI(imageUri)
+            binding.imageViewSelected.visibility = View.VISIBLE
+        }
     }
 
     override fun onCreateView(
@@ -53,8 +56,7 @@ class SignUpFragment : Fragment() {
         userRepository = UserRepository(db.userDao())
 
         binding.buttonSelectImage.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE)
+            imagePickerLauncher.launch("image/*")
         }
 
         binding.signUpButton.setOnClickListener {
@@ -91,15 +93,12 @@ class SignUpFragment : Fragment() {
     }
 
     private fun saveUserAndNavigate(userId: String, firstName: String, lastName: String, imageUrl: String) {
-        val user = User(uid = userId, firstName = firstName, lastName = lastName, imageUrl = imageUrl)
-
+        val fullName = "$firstName $lastName"
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val result = userRepository.insertUser(user)
-                if (result > 0) {
+                val result = userRepository.saveUserToFirestore(userId,fullName,imageUrl)
+                if (result != null) {
                     android.util.Log.d("SignUpFragment", "User successfully added with rowId: $result")
-                } else {
-                    android.util.Log.e("SignUpFragment", "Insert failed (rowId <= 0)")
                 }
             } catch (e: Exception) {
                 android.util.Log.e("SignUpFragment", "Insert exception: ${e.message}", e)
@@ -114,15 +113,6 @@ class SignUpFragment : Fragment() {
 
     private fun showToast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            imageUri = data.data
-            binding.imageViewSelected.setImageURI(imageUri)
-            binding.imageCardView.visibility = View.VISIBLE
-        }
     }
 
     override fun onDestroyView() {

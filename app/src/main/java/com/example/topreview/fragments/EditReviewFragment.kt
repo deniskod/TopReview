@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.topreview.database.DatabaseProvider
 import com.example.topreview.databinding.FragmentEditReviewBinding
 import com.example.topreview.models.Review
 import com.example.topreview.repository.ReviewRepository
@@ -37,16 +35,13 @@ class EditReviewFragment : Fragment() {
     private var imageUri: Uri? = null
     private var selectedCity: String? = null
 
-    companion object {
-        private const val TAG = "EditReviewFragment"
-    }
-
     private val imagePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
             imageUri = result.data!!.data
             binding.imageViewReview.setImageURI(imageUri)
+            binding.imageCardView.visibility = View.VISIBLE
         }
     }
 
@@ -81,8 +76,7 @@ class EditReviewFragment : Fragment() {
             Places.initialize(requireContext().applicationContext, apiKey)
         }
 
-        val db = DatabaseProvider.getDatabase(requireContext())
-        reviewRepository = ReviewRepository(db.reviewDao())
+        reviewRepository = ReviewRepository()
 
         val args = EditReviewFragmentArgs.fromBundle(requireArguments())
         review = args.review
@@ -96,6 +90,9 @@ class EditReviewFragment : Fragment() {
             Glide.with(requireContext())
                 .load(review.imageUrl)
                 .into(binding.imageViewReview)
+            binding.imageCardView.visibility = View.VISIBLE
+        } else {
+            binding.imageCardView.visibility = View.GONE
         }
 
         binding.buttonBack.setOnClickListener {
@@ -122,7 +119,7 @@ class EditReviewFragment : Fragment() {
         }
 
         binding.buttonSave.setOnClickListener {
-            val updatedDescription = binding.editTextDescription.text.toString()
+            val updatedDescription = binding.editTextDescription.text.toString().trim()
             val updatedRating = binding.ratingBar.rating
             val updatedTimestamp = System.currentTimeMillis()
             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
@@ -133,6 +130,7 @@ class EditReviewFragment : Fragment() {
             }
 
             binding.progressBar.visibility = View.VISIBLE
+            binding.buttonSave.isEnabled = false
 
             if (imageUri != null) {
                 FirebaseHelper.uploadImageToFirebaseStorage(imageUri!!, userId) { imageUrl ->
@@ -161,11 +159,13 @@ class EditReviewFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             reviewRepository.updateReview(updatedReview)
+            launch(Dispatchers.Main) {
+                Toast.makeText(requireContext(), "Review updated successfully!", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.GONE
+                binding.buttonSave.isEnabled = true
+                findNavController().navigateUp()
+            }
         }
-
-        Toast.makeText(requireContext(), "Review updated successfully!", Toast.LENGTH_SHORT).show()
-        binding.progressBar.visibility = View.GONE
-        findNavController().navigateUp()
     }
 
     override fun onDestroyView() {
