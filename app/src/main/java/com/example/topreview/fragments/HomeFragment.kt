@@ -1,40 +1,33 @@
 package com.example.topreview.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.topreview.R
-import com.example.topreview.adapters.ReviewAdapter
-import com.example.topreview.database.DatabaseProvider
+import com.example.topreview.adapter.ReviewsAdapter
 import com.example.topreview.databinding.FragmentHomeBinding
-import com.example.topreview.repository.ReviewRepository
-import com.example.topreview.repository.UserRepository
+import com.example.topreview.model.ReviewModel
+import com.example.topreview.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var reviewAdapter: ReviewAdapter
-    private lateinit var reviewRepository: ReviewRepository
-    private lateinit var userRepository: UserRepository
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
     private var showAllReviews = true
+    private var adapter: ReviewsAdapter? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,101 +35,117 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val db = DatabaseProvider.getDatabase(requireContext())
-        reviewRepository = ReviewRepository()
-        userRepository = UserRepository(db.userDao())
+        setupMenu()
+        setupSwipeRefresh()
+        setupButtons()
 
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        // Observe live data
+        UserModel.shared.users.observe(viewLifecycleOwner, Observer {
+            refreshReviewAdapter()
+        })
 
-        val menuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_main, menu)
+        ReviewModel.shared.reviews.observe(viewLifecycleOwner, Observer {
+            refreshReviewAdapter()
+            binding.progressBar.visibility = View.GONE
+        })
+
+        ReviewModel.shared.loadingState.observe(viewLifecycleOwner) { state ->
+            binding.swipeToRefresh.isRefreshing = state == ReviewModel.LoadingState.LOADING
+        }
+
+        // Initial data load
+        UserModel.shared.refreshAllUsers()
+        ReviewModel.shared.refreshAllReviews()
+    }
+
+    private fun setupMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
+                inflater.inflate(R.menu.menu_main, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_edit_profile -> {
-                        findNavController().navigate(R.id.action_homeFragment_to_editProfileFragment)
+                        navigateTo(R.id.action_homeFragment_to_editProfileFragment)
                         true
                     }
                     R.id.action_logout -> {
                         FirebaseAuth.getInstance().signOut()
-                        findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                        navigateTo(R.id.action_homeFragment_to_loginFragment)
                         true
                     }
                     else -> false
                 }
             }
         }, viewLifecycleOwner)
+    }
 
-        lifecycleScope.launch {
-            val users = userRepository.getAll()
-            val userMap = users.associateBy { it.uid }
-
-            reviewAdapter = ReviewAdapter(
-                emptyList(),
-                currentUserId = userId,
-                userMap = userMap,
-                onEditClicked = { review ->
-                    val action = HomeFragmentDirections.actionHomeFragmentToEditReviewFragment(review)
-                    findNavController().navigate(action)
-                },
-                onDeleteClicked = { review ->
-                    lifecycleScope.launch {
-                        reviewRepository.deleteReview(review)
-                        Toast.makeText(requireContext(), "Review deleted", Toast.LENGTH_SHORT).show()
-                        observeReviews(userId)
-                    }
-                }
-            )
-
-            binding.recyclerViewReviews.layoutManager = LinearLayoutManager(requireContext())
-            binding.recyclerViewReviews.adapter = reviewAdapter
-
-            binding.btnMyReviews.setImageResource(
-                if (showAllReviews) R.drawable.baseline_person_24 else R.drawable.ic_all
-            )
-
-            observeReviews(userId)
-
-            binding.btnMyReviews.setOnClickListener {
-                showAllReviews = !showAllReviews
-
-                val iconRes = if (showAllReviews) {
-                    R.drawable.baseline_person_24
-                } else {
-                    R.drawable.ic_all
-                }
-
-                binding.btnMyReviews.setImageResource(iconRes)
-                observeReviews(userId)
-            }
-
-            binding.btnAddReview.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_addReviewFragment)
+    private fun setupSwipeRefresh() {
+        binding.swipeToRefresh.setOnRefreshListener {
+            if (showAllReviews) {
+                ReviewModel.shared.refreshAllReviews()
+            } else {
+                ReviewModel.shared.refreshAllUserReviews(userId)
             }
         }
     }
 
-    private fun observeReviews(userId: String) {
-        if (showAllReviews) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                val reviews = reviewRepository.getAllReviews()
-                reviewAdapter.updateReviews(reviews)
-                if (reviews.isEmpty()) {
-                    Toast.makeText(requireContext(), "No reviews available", Toast.LENGTH_SHORT).show()
-                }
-            }
-        } else {
-            lifecycleScope.launch(Dispatchers.Main) {
-                val userReviews = reviewRepository.getUserReviews(userId)
-                reviewAdapter.updateReviews(userReviews)
-                if (userReviews.isEmpty()) {
-                    Toast.makeText(requireContext(), "You have no reviews", Toast.LENGTH_SHORT).show()
-                }
+    private fun setupButtons() {
+        binding.btnAddReview.setOnClickListener {
+            navigateTo(R.id.action_homeFragment_to_addReviewFragment)
+        }
+
+        binding.btnMyReviews.setOnClickListener {
+            showAllReviews = !showAllReviews
+            val icon = if (showAllReviews) R.drawable.baseline_person_24 else R.drawable.ic_all
+            binding.btnMyReviews.setImageResource(icon)
+
+            if (showAllReviews) {
+                ReviewModel.shared.refreshAllReviews()
+            } else {
+                ReviewModel.shared.refreshAllUserReviews(userId)
             }
         }
+    }
+
+    private fun refreshReviewAdapter() {
+        val reviews = ReviewModel.shared.reviews.value ?: emptyList()
+        val users = UserModel.shared.users.value?.associateBy { it.uid } ?: emptyMap()
+
+        val filteredReviews = if (showAllReviews) reviews else reviews.filter { it.userId == userId }
+
+        adapter = ReviewsAdapter(
+            reviews = filteredReviews,
+            currentUserId = userId,
+            userMap = users,
+            onEditClicked = { review ->
+                val action = HomeFragmentDirections.actionHomeFragmentToEditReviewFragment(review)
+                navigateTo(action)
+            },
+            onDeleteClicked = { review ->
+                lifecycleScope.launch(Dispatchers.Main) {
+                    ReviewModel.shared.delete(review) {
+                        Toast.makeText(requireContext(), "Review deleted", Toast.LENGTH_SHORT).show()
+                        if (showAllReviews) {
+                            ReviewModel.shared.refreshAllReviews()
+                        } else {
+                            ReviewModel.shared.refreshAllUserReviews(userId)
+                        }
+                    }
+                }
+            }
+        )
+
+        binding.recyclerViewReviews.adapter = adapter
+    }
+
+    private fun navigateTo(destinationId: Int) {
+        findNavController().navigate(destinationId)
+    }
+
+    private fun navigateTo(directions: Any) {
+        findNavController().navigate(directions as NavDirections)
     }
 
     override fun onDestroyView() {

@@ -110,4 +110,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
     implementation("com.google.android.material:material:1.11.0")
     implementation ("com.google.android.libraries.places:places:3.4.0")
+    implementation(libs.picasso)
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }

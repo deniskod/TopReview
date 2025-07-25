@@ -12,9 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.topreview.databinding.FragmentEditReviewBinding
-import com.example.topreview.models.Review
+import com.example.topreview.model.Review
 import com.example.topreview.repository.ReviewRepository
-import com.example.topreview.utils.FirebaseHelper
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter

@@ -1,6 +1,6 @@
 package com.example.topreview.fragments
 
-import AuthViewModel
+import com.example.topreview.model.AuthModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +17,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val authViewModel: AuthViewModel by viewModels()
+    private val authModel: AuthModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
             val password = binding.passwordEditText.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                authViewModel.signIn(email, password) { success, message ->
+                authModel.signIn(email, password) { success, message ->
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     if (success) {
                         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
@@ -60,7 +60,7 @@ class LoginFragment : Fragment() {
         val email = binding.emailEditText.text.toString().trim()
 
         if (email.isNotEmpty()) {
-            authViewModel.sendPasswordResetEmail(email) { success, message ->
+            authModel.sendPasswordResetEmail(email) { success, message ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         } else {

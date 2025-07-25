@@ -62,7 +62,7 @@
         android:label="Edit Review" >
         <argument
             android:name="review"
-            app:argType="com.example.topreview.models.Review" />
+            app:argType="com.example.topreview.model.Review" />
     </fragment>
 
 </navigation>

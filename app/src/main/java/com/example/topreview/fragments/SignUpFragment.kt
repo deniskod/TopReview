@@ -1,6 +1,6 @@
 package com.example.topreview.fragments
 
-import AuthViewModel
+import com.example.topreview.model.AuthModel
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.topreview.R
 import com.example.topreview.databinding.FragmentSignUpBinding
 import com.example.topreview.repository.UserRepository
-import com.example.topreview.utils.FirebaseHelper
 import com.example.topreview.database.DatabaseProvider
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +28,7 @@ class SignUpFragment : Fragment() {
     private lateinit var userRepository: UserRepository
     private var imageUri: Uri? = null
 
-    private val authViewModel: AuthViewModel by viewModels()
+    private val authModel: AuthModel by viewModels()
 
     private val imagePickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -72,7 +71,7 @@ class SignUpFragment : Fragment() {
                 lastName.isEmpty() -> showToast("Last name is required")
                 imageUri == null -> showToast("Profile image is required")
                 else -> {
-                    authViewModel.signUp(email, password) { success, message ->
+                    authModel.signUp(email, password) { success, message ->
                         if (success) {
                             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 

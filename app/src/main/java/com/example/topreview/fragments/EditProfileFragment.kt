@@ -12,8 +12,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.topreview.database.DatabaseProvider
 import com.example.topreview.databinding.FragmentEditProfileBinding
+import com.example.topreview.model.User
+import com.example.topreview.model.UserModel
 import com.example.topreview.repository.UserRepository
-import com.example.topreview.utils.FirebaseHelper
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,10 +25,10 @@ class EditProfileFragment : Fragment() {
     private var _binding: FragmentEditProfileBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var userRepository: UserRepository
     private var selectedImageUri: Uri? = null
     private var currentImageUrl: String? = null
     private val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    private val currentUser: User? = null
 
     private val imagePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -53,10 +54,7 @@ class EditProfileFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        val db = DatabaseProvider.getDatabase(requireContext())
-        userRepository = UserRepository(db.userDao())
-
-        loadUserData()
+        val user = UserModel.shared.getUserById(userId)
 
         binding.buttonSelectImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -74,13 +72,14 @@ class EditProfileFragment : Fragment() {
             }
 
             if (selectedImageUri != null) {
-                FirebaseHelper.uploadImageToFirebaseStorage(selectedImageUri!!, userId) { imageUrl ->
-                    if (imageUrl != null) {
-                        saveUserProfile(newFirstName, newLastName, imageUrl)
-                    } else {
-                        Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_SHORT).show()
-                    }
-                }
+//                FirebaseHelper.uploadImageToFirebaseStorage(selectedImageUri!!, userId) { imageUrl ->
+//                    if (imageUrl != null) {
+//                        saveUserProfile(newFirstName, newLastName, imageUrl)
+//                    } else {
+//                        Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+                UserModel.shared.add()
             } else {
                 saveUserProfile(newFirstName, newLastName, currentImageUrl)
             }
@@ -89,12 +88,12 @@ class EditProfileFragment : Fragment() {
 
 
 
-    private fun loadUserData() {
+    private fun loadCurrentUser() {
         lifecycleScope.launch {
-            val user = userRepository.getUserById(userId)
+            val user = UserModel.shared.getUserById(userId)
             withContext(Dispatchers.Main) {
                 if (user != null) {
-                    binding.editTextFirstName.setText(user.name.split(' ')[0])
+                    binding.editTextFirstName.setText(user..split(' ')[0])
                     binding.editTextLastName.setText(user.name.split(' ')[1])
                     currentImageUrl = user.imageUrl
 
