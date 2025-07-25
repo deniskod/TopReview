@@ -1,13 +1,16 @@
 package com.example.topreview.model
 
 import android.content.Context
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.topreview.base.Constants
 import com.example.topreview.base.MyApplication
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = Constants.Collections.REVIEWS)
 data class Review(
     @PrimaryKey var id: String,
@@ -17,7 +20,7 @@ data class Review(
     val imageUrl: String,
     val userId: String,
     val timestamp: Long? = null
-) {
+): Parcelable {
 
     companion object {
 

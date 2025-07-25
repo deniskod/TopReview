@@ -19,8 +19,11 @@ interface ReviewDao {
     fun getAllReviews(): LiveData<List<Review>>
 
     @Query("SELECT * FROM reviews WHERE userId = :userId ORDER BY timestamp DESC")
-    fun getUserReviews(userId: String): List<Review>
+    fun getUserReviews(userId: String): LiveData<List<Review>>
 
     @Delete
     fun delete(review: Review)
+
+    @Query("DELETE FROM reviews")
+    fun clearAll()
 }

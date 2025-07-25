@@ -1,4 +1,4 @@
-package com.example.topreview.fragments
+package com.example.topreview.fragment
 
 import android.os.Bundle
 import android.view.*
@@ -9,14 +9,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.topreview.R
-import com.example.topreview.adapter.ReviewsAdapter
+import com.example.topreview.adapter.ReviewsRecyclerAdapter
 import com.example.topreview.databinding.FragmentHomeBinding
+import com.example.topreview.model.Review
 import com.example.topreview.model.ReviewModel
 import com.example.topreview.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+interface OnReviewActionListener {
+    fun onEditClick(review: Review)
+    fun onDeleteClick(review: Review)
+}
 
 class HomeFragment : Fragment() {
 
@@ -25,7 +32,7 @@ class HomeFragment : Fragment() {
 
     private val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
     private var showAllReviews = true
-    private var adapter: ReviewsAdapter? = null
+    private var adapter: ReviewsRecyclerAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -39,7 +46,6 @@ class HomeFragment : Fragment() {
         setupSwipeRefresh()
         setupButtons()
 
-        // Observe live data
         UserModel.shared.users.observe(viewLifecycleOwner, Observer {
             refreshReviewAdapter()
         })
@@ -53,7 +59,6 @@ class HomeFragment : Fragment() {
             binding.swipeToRefresh.isRefreshing = state == ReviewModel.LoadingState.LOADING
         }
 
-        // Initial data load
         UserModel.shared.refreshAllUsers()
         ReviewModel.shared.refreshAllReviews()
     }
@@ -92,6 +97,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupButtons() {
+        val icon = if (showAllReviews) R.drawable.baseline_person_24 else R.drawable.ic_all
+        binding.btnMyReviews.setImageResource(icon)
+
         binding.btnAddReview.setOnClickListener {
             navigateTo(R.id.action_homeFragment_to_addReviewFragment)
         }
@@ -115,28 +123,32 @@ class HomeFragment : Fragment() {
 
         val filteredReviews = if (showAllReviews) reviews else reviews.filter { it.userId == userId }
 
-        adapter = ReviewsAdapter(
+        adapter = ReviewsRecyclerAdapter(
             reviews = filteredReviews,
             currentUserId = userId,
             userMap = users,
-            onEditClicked = { review ->
-                val action = HomeFragmentDirections.actionHomeFragmentToEditReviewFragment(review)
-                navigateTo(action)
-            },
-            onDeleteClicked = { review ->
-                lifecycleScope.launch(Dispatchers.Main) {
-                    ReviewModel.shared.delete(review) {
-                        Toast.makeText(requireContext(), "Review deleted", Toast.LENGTH_SHORT).show()
-                        if (showAllReviews) {
-                            ReviewModel.shared.refreshAllReviews()
-                        } else {
-                            ReviewModel.shared.refreshAllUserReviews(userId)
+            listener = object : OnReviewActionListener {
+                override fun onEditClick(review: Review) {
+                    val action = HomeFragmentDirections.actionHomeFragmentToEditReviewFragment(review)
+                    navigateTo(action)
+                }
+
+                override fun onDeleteClick(review: Review) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        ReviewModel.shared.delete(review) {
+                            Toast.makeText(requireContext(), "Review deleted", Toast.LENGTH_SHORT).show()
+                            if (showAllReviews) {
+                                ReviewModel.shared.refreshAllReviews()
+                            } else {
+                                ReviewModel.shared.refreshAllUserReviews(userId)
+                            }
                         }
                     }
                 }
             }
         )
 
+        binding.recyclerViewReviews.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewReviews.adapter = adapter
     }
 

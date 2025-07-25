@@ -3,7 +3,7 @@ package com.example.topreview.adapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.topreview.R
 import com.example.topreview.databinding.ItemReviewBinding
-import com.example.topreview.fragments.OnReviewActionListener
+import com.example.topreview.fragment.OnReviewActionListener
 import com.example.topreview.model.Review
 import com.example.topreview.model.User
 import com.squareup.picasso.Picasso

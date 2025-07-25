@@ -1,4 +1,4 @@
-package com.example.topreview.fragments
+package com.example.topreview.fragment
 
 import com.example.topreview.model.AuthModel
 import android.os.Bundle

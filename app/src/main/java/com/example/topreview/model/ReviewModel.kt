@@ -1,6 +1,8 @@
 package com.example.topreview.model
 
 import android.graphics.Bitmap
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.topreview.base.EmptyCallback
@@ -30,6 +32,7 @@ class ReviewModel private constructor() {
         firebaseModel.getAllReviews() { reviews ->
             executor.execute {
                 var currentTime = lastUpdated
+                database.reviewDao().clearAll()
                 for (review in reviews) {
                     database.reviewDao().insertReview(review)
                     review.timestamp?.let {
@@ -51,6 +54,7 @@ class ReviewModel private constructor() {
         firebaseModel.getUserReviews(userId) { reviews ->
             executor.execute {
                 var currentTime = lastUpdated
+                database.reviewDao().clearAll()
                 for (review in reviews) {
                     database.reviewDao().insertReview(review)
                     review.timestamp?.let {
@@ -90,8 +94,16 @@ class ReviewModel private constructor() {
     }
 
     fun delete(review: Review, callback: EmptyCallback) {
-        firebaseModel.deleteReview(review, callback)
+        firebaseModel.deleteReview(review) {
+            executor.execute {
+                database.reviewDao().delete(review)
+                Handler(Looper.getMainLooper()).post {
+                    callback()
+                }
+            }
+        }
     }
+
 
     private fun uploadImageToFirebase(
         image: Bitmap,
