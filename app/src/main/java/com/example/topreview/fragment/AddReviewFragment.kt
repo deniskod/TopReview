@@ -1,25 +1,22 @@
-package com.example.topreview.fragments
+package com.example.topreview.fragment
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.topreview.R
 import com.example.topreview.databinding.FragmentAddReviewBinding
-import com.example.topreview.models.Review
-import com.example.topreview.repository.ReviewRepository
-import com.example.topreview.utils.FirebaseHelper
+import com.example.topreview.model.Review
+import com.example.topreview.model.ReviewModel
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
@@ -28,15 +25,13 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.util.UUID
 
 class AddReviewFragment : Fragment() {
 
     private var _binding: FragmentAddReviewBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var reviewRepository: ReviewRepository
     private var imageUri: Uri? = null
     private var selectedCity: String? = null
 
@@ -50,7 +45,7 @@ class AddReviewFragment : Fragment() {
             checkSubmitButtonState()
         } else if (result.resultCode == AutocompleteActivity.RESULT_ERROR) {
             val status = Autocomplete.getStatusFromIntent(result.data!!)
-            Toast.makeText(requireContext(), "City selection error: ${status.statusMessage}", Toast.LENGTH_SHORT).show()
+            showToast("City selection error: ${status.statusMessage}")
         }
     }
 
@@ -65,11 +60,7 @@ class AddReviewFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAddReviewBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -85,8 +76,6 @@ class AddReviewFragment : Fragment() {
             Places.initialize(requireContext().applicationContext, apiKey)
         }
 
-        reviewRepository = ReviewRepository()
-
         binding.progressBar.visibility = View.GONE
         binding.buttonSubmitReview.isEnabled = false
 
@@ -96,14 +85,10 @@ class AddReviewFragment : Fragment() {
 
         binding.editTextCity.setOnClickListener {
             val fields = listOf(Place.Field.ID, Place.Field.NAME)
-            val intent = Autocomplete.IntentBuilder(
-                AutocompleteActivityMode.OVERLAY,
-                fields
-            )
+            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
                 .setTypeFilter(TypeFilter.CITIES)
                 .setCountries(listOf("IL"))
                 .build(requireContext())
-
             cityPickerLauncher.launch(intent)
         }
 
@@ -123,40 +108,34 @@ class AddReviewFragment : Fragment() {
         }
 
         binding.buttonSubmitReview.setOnClickListener {
-            if (!validateFields()) return@setOnClickListener
+            submitReview()
+        }
+    }
 
-            val description = binding.editTextDescription.text.toString()
-            val rating = binding.ratingBar.rating
-            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-            binding.progressBar.visibility = View.VISIBLE
-            binding.buttonSubmitReview.isEnabled = false
+    private fun submitReview() {
+        if (!validateFields()) return
 
-            imageUri?.let { uri ->
-                FirebaseHelper.uploadImageToFirebaseStorage(uri, userId) { imageUrl ->
+        val description = binding.editTextDescription.text.toString().trim()
+        val rating = binding.ratingBar.rating
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-                    val review = Review(
-                        description = description,
-                        rating = rating,
-                        city = selectedCity!!,
-                        imageUrl = imageUrl,
-                        userId = userId
-                    )
+        val review = Review(
+            id = UUID.randomUUID().toString(),
+            description = description,
+            rating = rating,
+            city = selectedCity!!,
+            imageUrl = "",
+            userId = userId,
+        )
 
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        reviewRepository.insertReview(review)
-                        requireActivity().runOnUiThread {
-                            binding.progressBar.visibility = View.GONE
-                            binding.buttonSubmitReview.isEnabled = true
-                            Toast.makeText(requireContext(), "Review added successfully!", Toast.LENGTH_SHORT).show()
-                            findNavController().navigateUp()
-                        }
-                    }
-                }
-            } ?: run {
-                Toast.makeText(requireContext(), "Image not selected", Toast.LENGTH_SHORT).show()
-                binding.progressBar.visibility = View.GONE
-                binding.buttonSubmitReview.isEnabled = true
-            }
+        val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageUri)
+
+        binding.progressBar.visibility = View.VISIBLE
+        binding.buttonSubmitReview.isEnabled = false
+
+        ReviewModel.shared.add(review, bitmap) {
+            binding.progressBar.visibility = View.GONE
+            findNavController().popBackStack()
         }
     }
 
@@ -166,24 +145,23 @@ class AddReviewFragment : Fragment() {
         getTextInputLayout(binding.editTextDescription)?.error = null
         getTextInputLayout(binding.editTextCity)?.error = null
 
-        val description = binding.editTextDescription.text.toString()
-        if (description.isEmpty()) {
+        if (binding.editTextDescription.text.isNullOrBlank()) {
             getTextInputLayout(binding.editTextDescription)?.error = "Description is required"
             isValid = false
         }
 
-        if (selectedCity.isNullOrEmpty()) {
+        if (selectedCity.isNullOrBlank()) {
             getTextInputLayout(binding.editTextCity)?.error = "Please select a city"
             isValid = false
         }
 
         if (binding.ratingBar.rating == 0f) {
-            Toast.makeText(requireContext(), "Please select a rating!", Toast.LENGTH_SHORT).show()
+            showToast("Please select a rating!")
             isValid = false
         }
 
         if (imageUri == null) {
-            Toast.makeText(requireContext(), "Please select an image!", Toast.LENGTH_SHORT).show()
+            showToast("Please select an image!")
             isValid = false
         }
 
@@ -197,20 +175,15 @@ class AddReviewFragment : Fragment() {
     private fun checkSubmitButtonState() {
         val description = binding.editTextDescription.text.toString()
         val rating = binding.ratingBar.rating
-        val isEnabled = description.isNotEmpty() && rating > 0 &&
-                imageUri != null && !selectedCity.isNullOrEmpty()
+        val enabled = description.isNotBlank() && rating > 0 && imageUri != null && !selectedCity.isNullOrBlank()
 
-        binding.buttonSubmitReview.isEnabled = isEnabled
+        binding.buttonSubmitReview.isEnabled = enabled
+        val colorRes = if (enabled) R.color.button_enabled_bg else R.color.button_disabled_bg
+        binding.buttonSubmitReview.setBackgroundColor(resources.getColor(colorRes, requireContext().theme))
+    }
 
-        val colorResId = if (isEnabled) {
-            R.color.button_enabled_bg
-        } else {
-            R.color.button_disabled_bg
-        }
-
-        binding.buttonSubmitReview.setBackgroundColor(
-            resources.getColor(colorResId, requireContext().theme)
-        )
+    private fun showToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

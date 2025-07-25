@@ -1,7 +1,9 @@
+package com.example.topreview.model
+
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 
-class AuthViewModel : ViewModel() {
+class AuthModel : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
 

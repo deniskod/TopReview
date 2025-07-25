@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.topreview.fragments.LoginFragment"
+        android:name="com.example.topreview.fragment.LoginFragment"
         android:label="Login">
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.topreview.fragments.SignUpFragment"
+        android:name="com.example.topreview.fragment.SignUpFragment"
         android:label="Sign Up">
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.topreview.fragments.HomeFragment"
+        android:name="com.example.topreview.fragment.HomeFragment"
         android:label="Home">
         <action
             android:id="@+id/action_homeFragment_to_editProfileFragment"
@@ -48,21 +48,21 @@
 
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.example.topreview.fragments.EditProfileFragment"
+        android:name="com.example.topreview.fragment.EditProfileFragment"
         android:label="Edit Profile" />
 
     <fragment
         android:id="@+id/addReviewFragment"
-        android:name="com.example.topreview.fragments.AddReviewFragment"
+        android:name="com.example.topreview.fragment.AddReviewFragment"
         android:label="Add Review" />
 
     <fragment
         android:id="@+id/editReviewFragment"
-        android:name="com.example.topreview.fragments.EditReviewFragment"
+        android:name="com.example.topreview.fragment.EditReviewFragment"
         android:label="Edit Review" >
         <argument
             android:name="review"
-            app:argType="com.example.topreview.models.Review" />
+            app:argType="com.example.topreview.model.Review" />
     </fragment>
 
 </navigation>

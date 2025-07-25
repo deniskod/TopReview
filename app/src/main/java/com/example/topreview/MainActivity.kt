@@ -1,6 +1,6 @@
 package com.example.topreview
 
-import AuthViewModel
+import com.example.topreview.model.AuthModel
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +15,7 @@ import com.google.firebase.FirebaseApp
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val authViewModel: AuthViewModel by viewModels()
+    private val authModel: AuthModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         val graph = navController.navInflater.inflate(R.navigation.nav_graph)
         graph.setStartDestination(
-            if (authViewModel.isUserSignedIn()) R.id.homeFragment
+            if (authModel.isUserSignedIn()) R.id.homeFragment
             else R.id.loginFragment
         )
         navController.graph = graph
